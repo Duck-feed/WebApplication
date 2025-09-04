@@ -1,0 +1,66 @@
+{
+  "users": [
+    { "id": 1, "name": "Hoang", "avatar": "/assets/react.svg" },
+    { "id": 2, "name": "Lan", "avatar": "/avatars/lan.png" }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "author": "John Doe",
+      "avatar": "https://i.pravatar.cc/100?img=1",
+      "time": "2h ago",
+      "content": "Just finished my React project 🚀 Excited to share it with you all!",
+      "images": [
+        "https://picsum.photos/seed/pic1/400/300",
+        "https://picsum.photos/seed/pic2/400/300"
+      ],
+      "likes": 12,
+      "comments": 5
+    },
+    {
+      "id": 2,
+      "author": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/100?img=2",
+      "time": "5h ago",
+      "content": "Lovely day for a walk in the park 🌳☀️",
+      "images": [
+        "https://picsum.photos/seed/pic3/400/300"
+      ],
+      "likes": 34,
+      "comments": 8
+    },
+    {
+      "id": 3,
+      "author": "Michael Johnson",
+      "avatar": "https://i.pravatar.cc/100?img=3",
+      "time": "1d ago",
+      "content": "Anyone up for a game night this weekend? 🎮",
+      "images": [],
+      "likes": 7,
+      "comments": 3
+    },
+    {
+      "id": 4,
+      "author": "Emily Davis",
+      "avatar": "https://i.pravatar.cc/100?img=4",
+      "time": "2d ago",
+      "content": "Had an amazing dinner last night 😋",
+      "images": [
+        "https://picsum.photos/seed/pic4/400/300",
+        "https://picsum.photos/seed/pic5/400/300",
+        "https://picsum.photos/seed/pic6/400/300"
+      ],
+      "likes": 56,
+      "comments": 14
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "postId": 1,
+      "userId": 2,
+      "content": "Nice post!",
+      "createdAt": "2025-08-26T09:30:00Z"
+    }
+  ]
+}
