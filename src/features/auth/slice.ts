@@ -12,16 +12,16 @@ export const loadDefaultUser = createAsyncThunk(
   }
 );
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
   loading: boolean;
-  initialized: boolean;   // ✅ thêm cờ này
+  initialized: boolean; 
 }
 
 const initialState: AuthState = {
   user: null,
   loading: false,
-  initialized: false,     // ✅ mặc định chưa init
+  initialized: false,    
 };
 
 const authSlice = createSlice({
@@ -43,12 +43,12 @@ const authSlice = createSlice({
         (state, action: PayloadAction<User>) => {
           state.user = action.payload;
           state.loading = false;
-          state.initialized = true;   // ✅ đã init xong
+          state.initialized = true;
         }
       )
       .addCase(loadDefaultUser.rejected, (state) => {
         state.loading = false;
-        state.initialized = true;     // ✅ cũng coi như init xong (dù fail)
+        state.initialized = true;
       });
   },
 });
@@ -58,4 +58,4 @@ export const authReducer = authSlice.reducer;
 
 export const selectAuthUser = (state: RootState) => state.auth.user;
 export const selectAuthLoading = (state: RootState) => state.auth.loading;
-export const selectAuthInitialized = (state: RootState) => state.auth.initialized; // ✅ thêm selector
+export const selectAuthInitialized = (state: RootState) => state.auth.initialized;

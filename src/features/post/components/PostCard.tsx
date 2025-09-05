@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Card, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-
 import HeartIcon from "@/components/icons/HeartIcon"
 import CommentIcon from "@/components/icons/CommentIcon"
 import MoreIcon from "@/components/icons/MoreIcon"
