@@ -1,4 +1,3 @@
-// src/layouts/RootLayout.tsx
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
@@ -14,5 +13,5 @@ export default function RootLayout() {
     }
   }, [dispatch, initialized]);
 
-  return <Outlet />; // bên trong sẽ là MainLayout
+  return <Outlet />;
 }
