@@ -22,11 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Start JSON Server
-        run: |
-          npx json-server --watch public/db.json --port 3001 &
-          sleep 3
-
       - name: Run tests
         run: npm run test
 
@@ -34,14 +29,11 @@ jobs:
         run: npm run build
 
       - name: Deploy to GitHub Pages
+        if: ${{ env.ACT != 'true' }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-      - name: Set environment variables
-        run: |
-          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> $GITHUB_ENV
-
 
 
 
