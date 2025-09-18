@@ -11,9 +11,7 @@ export const routes: RouteObject[] = [
     children: [
       {
         element: <MainLayout />,
-        children: [
-          { index: true, element: <NewFeed /> },
-        ],
+        children: [{ index: true, element: <NewFeed /> }],
       },
     ],
   },

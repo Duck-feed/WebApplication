@@ -5,10 +5,9 @@ import { authReducer } from "@/features/auth";
 export const store = configureStore({
   reducer: {
     post: postReducer,
-    auth: authReducer
+    auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,11 +1,11 @@
-import SettingIcon from "@/components/icons/SettingIcon"
-import NavItem from "./NavItem"
-import { navItems } from "./navItems"
+import SettingIcon from "@/components/icons/SettingIcon";
+import NavItem from "./NavItem";
+import { navItems } from "./navItems";
 
 interface SidebarProps {
-  active: string
-  setActive: (id: string) => void
-  setIsOpen: (v: boolean) => void
+  active: string;
+  setActive: (id: string) => void;
+  setIsOpen: (v: boolean) => void;
 }
 
 export default function DesktopSidebar({ active, setActive, setIsOpen }: SidebarProps) {
@@ -24,8 +24,8 @@ export default function DesktopSidebar({ active, setActive, setIsOpen }: Sidebar
             active={active}
             className="mx-1 p-3 w-16"
             onClick={() => {
-              setActive(id)
-              onClick?.()
+              setActive(id);
+              onClick?.();
             }}
           />
         ))}
@@ -35,5 +35,5 @@ export default function DesktopSidebar({ active, setActive, setIsOpen }: Sidebar
         <SettingIcon />
       </div>
     </div>
-  )
+  );
 }

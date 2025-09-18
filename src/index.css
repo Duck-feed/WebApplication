@@ -3,14 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: #F0F2F5;
+  --background: #f0f2f5;
 }
 
 body {
   background-color: var(--background);
 }
-
-
 
 @layer base {
   :root {
@@ -67,8 +65,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {

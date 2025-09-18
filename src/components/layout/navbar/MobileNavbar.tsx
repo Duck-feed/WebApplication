@@ -1,7 +1,7 @@
-import { motion } from "framer-motion"
-import SettingIcon from "@/components/icons/SettingIcon"
-import NavItem from "./NavItem"
-import { navItems } from "./navItems"
+import { motion } from "framer-motion";
+import SettingIcon from "@/components/icons/SettingIcon";
+import NavItem from "./NavItem";
+import { navItems } from "./navItems";
 
 export function MobileTopbar() {
   return (
@@ -15,14 +15,14 @@ export function MobileTopbar() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 interface MobileBottombarProps {
-  active: string
-  setActive: (id: string) => void
-  setIsOpen: (v: boolean) => void
-  showNavbar: boolean
+  active: string;
+  setActive: (id: string) => void;
+  setIsOpen: (v: boolean) => void;
+  showNavbar: boolean;
 }
 
 export function MobileBottombar({
@@ -46,11 +46,11 @@ export function MobileBottombar({
           active={active}
           className="flex-1 mx-1 p-3"
           onClick={() => {
-            setActive(id)
-            onClick?.()
+            setActive(id);
+            onClick?.();
           }}
         />
       ))}
     </motion.div>
-  )
+  );
 }

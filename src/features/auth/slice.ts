@@ -5,23 +5,20 @@ import { authApi } from "./api";
 import type { User } from "./types";
 import type { RootState } from "@/app/store";
 
-export const loadDefaultUser = createAsyncThunk(
-  "auth/loadDefaultUser",
-  async () => {
-    return await authApi.getUserById(1); // Giả sử tải user có id = 1
-  }
-);
+export const loadDefaultUser = createAsyncThunk("auth/loadDefaultUser", async () => {
+  return await authApi.getUserById(1); // Giả sử tải user có id = 1
+});
 
 export interface AuthState {
   user: User | null;
   loading: boolean;
-  initialized: boolean; 
+  initialized: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   loading: false,
-  initialized: false,    
+  initialized: false,
 };
 
 const authSlice = createSlice({
@@ -38,14 +35,11 @@ const authSlice = createSlice({
       .addCase(loadDefaultUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        loadDefaultUser.fulfilled,
-        (state, action: PayloadAction<User>) => {
-          state.user = action.payload;
-          state.loading = false;
-          state.initialized = true;
-        }
-      )
+      .addCase(loadDefaultUser.fulfilled, (state, action: PayloadAction<User>) => {
+        state.user = action.payload;
+        state.loading = false;
+        state.initialized = true;
+      })
       .addCase(loadDefaultUser.rejected, (state) => {
         state.loading = false;
         state.initialized = true;

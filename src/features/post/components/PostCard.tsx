@@ -1,30 +1,22 @@
-import { useState } from "react"
-import { Card, CardFooter } from "@/components/ui/card"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import HeartIcon from "@/components/icons/HeartIcon"
-import CommentIcon from "@/components/icons/CommentIcon"
-import MoreIcon from "@/components/icons/MoreIcon"
-import HorizontalScroll from "@/components/common/HorizontalScroll"
-import type { Post } from "../types"
+import { useState } from "react";
+import { Card, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import HeartIcon from "@/components/icons/HeartIcon";
+import CommentIcon from "@/components/icons/CommentIcon";
+import MoreIcon from "@/components/icons/MoreIcon";
+import HorizontalScroll from "@/components/common/HorizontalScroll";
+import type { Post } from "../types";
 
-export default function PostCard({
-  author,
-  avatar,
-  time,
-  content,
-  images,
-  likes,
-  comments,
-}: Post) {
-  const [liked, setLiked] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
+export default function PostCard({ author, avatar, time, content, images, likes, comments }: Post) {
+  const [liked, setLiked] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleImageClick = (img: string) => {
     if (!isDragging) {
-      alert("Open image: " + img)
+      alert("Open image: " + img);
     }
-  }
+  };
 
   return (
     <Card className="flex flex-col border-2 rounded-xl w-full max-w-[640px] pt-4 pb-4 bg-white">
@@ -39,10 +31,7 @@ export default function PostCard({
           {/* Author + time + more */}
           <div className="flex items-center justify-between pr-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span
-                className="font-bold max-w-[150px] truncate cursor-pointer"
-                title={author}
-              >
+              <span className="font-bold max-w-[150px] truncate cursor-pointer" title={author}>
                 {author}
               </span>
               <span className="text-gray-500 text-sm">{time}</span>
@@ -65,10 +54,7 @@ export default function PostCard({
 
       {/* Images carousel */}
       {images && images.length > 0 && (
-        <HorizontalScroll
-          className="mt-2 pl-16 pr-5"
-          onDragStateChange={setIsDragging}
-        >
+        <HorizontalScroll className="mt-2 pl-16 pr-5" onDragStateChange={setIsDragging}>
           {images.map((img, idx) => (
             <img
               key={idx}
@@ -92,9 +78,7 @@ export default function PostCard({
           className="group flex items-center gap-2 rounded-full hover:bg-gray-100 active:scale-75 transition"
         >
           <HeartIcon active={liked} />
-          <span className="text-sm sm:text-base">
-            {likes + (liked ? 1 : 0)}
-          </span>
+          <span className="text-sm sm:text-base">{likes + (liked ? 1 : 0)}</span>
         </Button>
 
         <Button
@@ -107,5 +91,5 @@ export default function PostCard({
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
