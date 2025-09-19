@@ -6,7 +6,8 @@ import { GoSmiley } from "react-icons/go";
 import { Button } from "@/components/ui/button";
 
 export default function AddPostForm() {
-  const { register } = useFormContext();
+  const { register, formState } = useFormContext();
+  const { errors } = formState;
 
   return (
     <div className="flex flex-row gap-1 w-full mt-2">
@@ -26,11 +27,16 @@ export default function AddPostForm() {
           minRows={1}
           maxRows={10}
         />
+        {errors.content && (
+          <p className="text-sm text-red-500 mt-1">
+            {errors.content.message?.toString()}
+          </p>
+        )}
         <div className="flex items-center gap-3 mb-3 text-gray-600">
-          <Button variant="ghost" size="icon" className="hover:text-black">
+          <Button type="button" variant="ghost" size="icon" className="hover:text-black">
             <IoImageOutline />
           </Button>
-          <Button variant="ghost" size="icon" className="hover:text-black">
+          <Button type="button" variant="ghost" size="icon" className="hover:text-black">
             <GoSmiley />
           </Button>
         </div>
