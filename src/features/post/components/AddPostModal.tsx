@@ -1,19 +1,19 @@
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import PostingToast from "@/components/common/PostingToast";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import AddPostForm from "@/features/post/components/AddPostForm";
-import { useForm, FormProvider } from "react-hook-form";
-import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { POST_VISIBILITY } from "@/features/post/constant";
 import { createPostSchema } from "@/features/post/validation/createPostSchema";
-import PostingToast from "@/components/common/PostingToast";
-import { useState } from "react";
-import { POST_VISIBILITY } from "../constant";
+import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 
 export default function AddPostModal({
   isOpen,
@@ -32,7 +32,10 @@ export default function AddPostModal({
     },
   });
 
-  const { handleSubmit, reset, formState: { isValid, isSubmitting },
+  const {
+    handleSubmit,
+    reset,
+    formState: { isValid, isSubmitting },
   } = methods;
   const [isPosting, setIsPosting] = useState(false);
 
