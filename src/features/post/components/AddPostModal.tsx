@@ -1,23 +1,36 @@
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import AddPostForm from "./AddPostForm";
-import { useForm, FormProvider, useWatch } from "react-hook-form";
-import type { CreatePostCommand } from "../validation/createPostSchema";
+import AddPostForm from "@/features/post/components/AddPostForm";
+import { POST_VISIBILITY } from "@/features/post/constant";
+import { createPostSchema } from "@/features/post/validation/createPostSchema";
+import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
+import { createPost } from "../api";
 
-export default function AddPostModal({
-  isOpen,
-  onClose,
-}: {
+type AddPostModalProps = Readonly<{
   isOpen: boolean;
-  onClose: () => void;
-}) {
+  onOpenChange?: (isOpen: boolean) => void;
+  onClose?: () => void; // backward compatibility
+}>;
+
+export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostModalProps) {
+  const setOpen = (open: boolean) => {
+    if (onOpenChange) onOpenChange(open);
+    else if (!open) onClose?.();
+  };
+
   const methods = useForm<CreatePostCommand>({
+    resolver: zodResolver(createPostSchema),
+    mode: "onChange",
     defaultValues: {
       content: "",
       visibility: "PUBLIC_ALL",
@@ -25,19 +38,48 @@ export default function AddPostModal({
     },
   });
 
-  const { handleSubmit, control } = methods;
+  const {
+    handleSubmit,
+    reset,
+    formState: { isValid, isSubmitting },
+  } = methods;
+  const [isPosting, setIsPosting] = useState(false);
 
-  const content = useWatch({ control, name: "content" });
-  const media = useWatch({ control, name: "media" });
+  const isPostDisabled = !isValid || isSubmitting || isPosting;
 
-  const isPostDisabled = !(content?.trim() || media?.length);
+  const onSubmit = async (data: CreatePostCommand) => {
+    setIsPosting(true);
+    setOpen(false);
+    try {
+      const result = await toast
+        .promise(createPost(data), {
+          loading: "Posting...",
+          success: "Post created successfully!",
+          error: (e) => e?.message || "Something went wrong. Please try again.",
+        })
+        .unwrap();
 
-  const onSubmit = (data: CreatePostCommand) => {
-    console.log("Submitted", data);
+      console.log("Post created:", result);
+
+      reset({
+        content: "",
+        visibility: POST_VISIBILITY.PUBLIC_ALL,
+        media: [],
+      });
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error("Failed to post", e.message);
+      } else {
+        console.error("Failed to post", e);
+      }
+      setOpen(true);
+    } finally {
+      setIsPosting(false);
+    }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent
         aria-describedby="New post creation form"
         className="flex flex-col bg-white p-4 sm:max-w-[640px] sm:max-h-[90vh] sm:rounded-xl max-w-full max-h-screen"
@@ -48,7 +90,12 @@ export default function AddPostModal({
             <DialogHeader className="flex flex-col items-center relative">
               <DialogTitle className="text-center mt-3">New post</DialogTitle>
               <DialogClose asChild>
-                <Button variant="ghost" size="sm" className="absolute right-1" onClick={onClose}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-1"
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </Button>
               </DialogClose>

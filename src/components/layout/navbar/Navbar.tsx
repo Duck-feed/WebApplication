@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import DesktopSidebar from "./DesktopSidebar";
-import { MobileTopbar, MobileBottombar } from "./MobileNavbar";
 import AddPostModal from "@/features/post/components/AddPostModal";
+import DesktopSidebar from "./DesktopSidebar";
+import { MobileBottombar, MobileTopbar } from "./MobileNavbar";
 
 export default function Navbar() {
   const [active, setActive] = useState("");
@@ -30,7 +30,7 @@ export default function Navbar() {
         setIsOpen={setIsOpen}
         showNavbar={showNavbar}
       />
-      <AddPostModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <AddPostModal isOpen={isOpen} onOpenChange={setIsOpen} />
     </>
   );
 }

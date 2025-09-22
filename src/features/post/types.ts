@@ -10,7 +10,7 @@ export interface Post {
   comments: number;
 }
 
-export interface CreatePostCommand {
+export interface CreatePostDto {
   content: string;
   media?: Media[];
   visibility: string;

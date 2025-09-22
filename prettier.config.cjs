@@ -12,6 +12,6 @@ module.exports = {
   jsxBracketSameLine: false, // Put the `>` of a multi-line JSX element at the end of the last line
   endOfLine: "auto", // Maintain existing line endings (useful for cross-platform projects)
   importOrder: ["^react$", "^@?\\w", "^(@|@src)(/.*|$)", "^[./]"], // Custom import sorting
-  importOrderSeparation: true,
+  importOrderSeparation: false,
   importOrderSortSpecifiers: true,
 };
