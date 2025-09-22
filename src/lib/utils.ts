@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
 export function normalizeError(error: any): string {
   const data = error?.response?.data;
 
-  if (!data) return "Network error, please try again";
+  if (!data) return "Network error, Please try again";
 
   if (data.errors) {
     if (typeof data.errors === "string") return data.errors;
@@ -24,7 +24,7 @@ export function normalizeError(error: any): string {
 
   if (data.message) return data.message;
 
-  return "Something went wrong, please try again";
+  return "Something went wrong, Please try again";
 }
 
 export const paramsSerializer = (params: Record<string, any>) => {
