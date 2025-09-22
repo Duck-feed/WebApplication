@@ -20,7 +20,7 @@ export const createPostSchema = z
       (data.content && data.content.trim().length > 0) || (data.media && data.media.length > 0),
     {
       message: "Either content or media is required.",
-      path: ["content"],
+      path: ["media"],
     },
   );
 
