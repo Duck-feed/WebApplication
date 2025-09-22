@@ -1,9 +1,9 @@
-import AddPostModal from "@/features/post/components/AddPostModal";
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { UserAvatar } from "@/components/common/UserAvatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import AddPostModal from "@/features/post/components/AddPostModal";
 
 export default function AddPostCard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +39,7 @@ export default function AddPostCard() {
       </Card>
 
       {/* Modal form */}
-      <AddPostModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <AddPostModal isOpen={isOpen} onOpenChange={setIsOpen} />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
 import App from "./App";
 import ReduxProvider from "./app/providers/ReduxProvider";
 import "./index.css";
@@ -12,5 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <App />
       </BrowserRouter>
     </ReduxProvider>
+    <Toaster toastOptions={{ className: "z-50" }} />
   </React.StrictMode>,
 );

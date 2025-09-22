@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import PostingToast from "@/components/common/PostingToast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,13 +14,14 @@ import AddPostForm from "@/features/post/components/AddPostForm";
 import { POST_VISIBILITY } from "@/features/post/constant";
 import { createPostSchema } from "@/features/post/validation/createPostSchema";
 import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
+import { createPost } from "../api";
 
 export default function AddPostModal({
   isOpen,
-  onClose,
+  onOpenChange,
 }: Readonly<{
   isOpen: boolean;
-  onClose: () => void;
+  onOpenChange: (isOpen: boolean) => void;
 }>) {
   const methods = useForm<CreatePostCommand>({
     resolver: zodResolver(createPostSchema),
@@ -41,58 +42,72 @@ export default function AddPostModal({
 
   const isPostDisabled = !isValid || isSubmitting || isPosting;
 
-  const onSubmit = (data: CreatePostCommand) => {
-    console.log("Submitted", data);
+  const onSubmit = async (data: CreatePostCommand) => {
     setIsPosting(true);
+    onOpenChange(false);
+    try {
+      const result = await toast
+        .promise(createPost(data), {
+          loading: "Posting...",
+          success: "Post created successfully!",
+          error: (e) => e?.message || "Something went wrong. Please try again.",
+        })
+        .unwrap();
 
-    // Simulate a network request
-    setTimeout(() => {
+      console.log("Post created:", result);
+
+      reset({
+        content: "",
+        visibility: POST_VISIBILITY.PUBLIC_ALL,
+        media: [],
+      });
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error("Failed to post", e.message);
+      } else {
+        console.error("Failed to post", e);
+      }
+      onOpenChange(true);
+    } finally {
       setIsPosting(false);
-    }, 4000);
-
-    reset({
-      content: "",
-      visibility: POST_VISIBILITY.PUBLIC_ALL,
-      media: [],
-    });
-    onClose();
+    }
   };
 
   return (
-    <>
-      {/* Spinner overlay */}
-      <PostingToast show={isPosting} />
-
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent
-          aria-describedby="New post creation form"
-          className="flex flex-col bg-white p-4 sm:max-w-[640px] sm:max-h-[90vh] sm:rounded-xl max-w-full max-h-screen"
-        >
-          <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col">
-              {/* Header */}
-              <DialogHeader className="flex flex-col items-center relative">
-                <DialogTitle className="text-center mt-3">New post</DialogTitle>
-                <DialogClose asChild>
-                  <Button variant="ghost" size="sm" className="absolute right-1" onClick={onClose}>
-                    Cancel
-                  </Button>
-                </DialogClose>
-              </DialogHeader>
-
-              {/* Form Fields */}
-              <AddPostForm />
-
-              {/* Footer */}
-              <div className="flex justify-end mt-3">
-                <Button type="submit" disabled={isPostDisabled} variant="outline">
-                  Post
+    <Dialog open={isOpen} onOpenChange={() => onOpenChange(false)}>
+      <DialogContent
+        aria-describedby="New post creation form"
+        className="flex flex-col bg-white p-4 sm:max-w-[640px] sm:max-h-[90vh] sm:rounded-xl max-w-full max-h-screen"
+      >
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col">
+            {/* Header */}
+            <DialogHeader className="flex flex-col items-center relative">
+              <DialogTitle className="text-center mt-3">New post</DialogTitle>
+              <DialogClose asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-1"
+                  onClick={() => onOpenChange(false)}
+                >
+                  Cancel
                 </Button>
-              </div>
-            </form>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
-    </>
+              </DialogClose>
+            </DialogHeader>
+
+            {/* Form Fields */}
+            <AddPostForm />
+
+            {/* Footer */}
+            <div className="flex justify-end mt-3">
+              <Button type="submit" disabled={isPostDisabled} variant="outline">
+                Post
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
   );
 }
