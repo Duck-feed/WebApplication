@@ -12,7 +12,10 @@ const RECENT_STORAGE_KEY = "emoji_recent_v1";
 const MAX_RECENT = 7;
 
 // Basic click-outside hook
-function useClickOutside<T extends HTMLElement>(ref: React.RefObject<T>, onOutside: () => void) {
+function useClickOutside<T extends HTMLElement>(
+  ref: React.RefObject<T | null>,
+  onOutside: () => void,
+) {
   useEffect(() => {
     function handler(e: MouseEvent) {
       if (!ref.current) return;

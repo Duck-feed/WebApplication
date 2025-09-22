@@ -16,13 +16,18 @@ import { createPostSchema } from "@/features/post/validation/createPostSchema";
 import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 import { createPost } from "../api";
 
-export default function AddPostModal({
-  isOpen,
-  onOpenChange,
-}: Readonly<{
+type AddPostModalProps = Readonly<{
   isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-}>) {
+  onOpenChange?: (isOpen: boolean) => void;
+  onClose?: () => void; // backward compatibility
+}>;
+
+export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostModalProps) {
+  const setOpen = (open: boolean) => {
+    if (onOpenChange) onOpenChange(open);
+    else if (!open) onClose?.();
+  };
+
   const methods = useForm<CreatePostCommand>({
     resolver: zodResolver(createPostSchema),
     mode: "onChange",
@@ -44,7 +49,7 @@ export default function AddPostModal({
 
   const onSubmit = async (data: CreatePostCommand) => {
     setIsPosting(true);
-    onOpenChange(false);
+    setOpen(false);
     try {
       const result = await toast
         .promise(createPost(data), {
@@ -67,14 +72,14 @@ export default function AddPostModal({
       } else {
         console.error("Failed to post", e);
       }
-      onOpenChange(true);
+      setOpen(true);
     } finally {
       setIsPosting(false);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => onOpenChange(false)}>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent
         aria-describedby="New post creation form"
         className="flex flex-col bg-white p-4 sm:max-w-[640px] sm:max-h-[90vh] sm:rounded-xl max-w-full max-h-screen"
@@ -89,7 +94,7 @@ export default function AddPostModal({
                   variant="ghost"
                   size="sm"
                   className="absolute right-1"
-                  onClick={() => onOpenChange(false)}
+                  onClick={() => setOpen(false)}
                 >
                   Cancel
                 </Button>
