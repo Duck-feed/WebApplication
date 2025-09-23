@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import SettingIcon from "@/components/icons/SettingIcon";
+import SettingsMenu from "./SettingsMenu";
 import NavItem from "./NavItem";
 import { navItems } from "./navItems";
 
@@ -10,9 +11,7 @@ export function MobileTopbar() {
         <img src="/assets/logo.png" alt="logo" className="w-24 h-16" />
       </div>
       <div className="flex items-center w-10 cursor-pointer ml-auto">
-        <div className="[transform:rotateY(180deg)]">
-          <SettingIcon />
-        </div>
+        <SettingsMenu align="end" trigger={<div className="[transform:rotateY(180deg)]"><SettingIcon /></div>} />
       </div>
     </div>
   );

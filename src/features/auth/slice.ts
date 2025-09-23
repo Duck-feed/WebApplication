@@ -75,6 +75,18 @@ export const loadDefaultUser = createAsyncThunk("auth/loadDefaultUser", async ()
   return user;
 });
 
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      await authApi.logout();
+      return;
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -124,6 +136,34 @@ const authSlice = createSlice({
         state.loading = false;
         state.initialized = true;
         state.error = null;
+      })
+
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.initialized = false;
+        state.error = null;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+        state.loading = false;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.initialized = false;
+        state.error = null;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+        state.loading = false;
       });
   },
 });
@@ -135,3 +175,4 @@ export const selectAuthUser = (state: RootState) => state.auth.user;
 export const selectAuthLoading = (state: RootState) => state.auth.loading;
 export const selectAuthInitialized = (state: RootState) => state.auth.initialized;
 export const selectAuthError = (state: RootState) => state.auth.error;
+

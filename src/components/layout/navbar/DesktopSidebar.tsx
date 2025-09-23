@@ -1,6 +1,6 @@
-import SettingIcon from "@/components/icons/SettingIcon";
 import NavItem from "./NavItem";
 import { navItems } from "./navItems";
+import SettingsMenu from "./SettingsMenu";
 
 interface SidebarProps {
   active: string;
@@ -31,8 +31,8 @@ export default function DesktopSidebar({ active, setActive, setIsOpen }: Sidebar
         ))}
       </div>
 
-      <div className="flex flex-col items-center w-20 mb-8 cursor-pointer">
-        <SettingIcon />
+      <div className="flex flex-col items-center w-20 mb-8">
+        <SettingsMenu align="start"/>
       </div>
     </div>
   );
