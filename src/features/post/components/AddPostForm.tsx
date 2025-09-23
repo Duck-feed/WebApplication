@@ -72,7 +72,9 @@ export default function AddPostForm() {
           }}
         />
         {errors.content && (
-          <p className="text-sm text-red-500 mt-1">{errors.content.message?.toString()}</p>
+          <span role="alert" className="text-sm text-red-500 mt-1">
+            {errors.content.message?.toString()}
+          </span>
         )}
 
         {/* Toolbar */}
@@ -98,6 +100,7 @@ export default function AddPostForm() {
                 variant="ghost"
                 size="icon"
                 className="hover:text-black"
+                aria-label="Insert emoji"
               >
                 <GoSmiley />
               </Button>

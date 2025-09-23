@@ -1,14 +1,15 @@
 import axios from "axios";
 import { normalizeError, paramsSerializer } from "@/lib/utils";
+import { API_BASE_URL } from "./env";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  paramsSerializer
+  paramsSerializer,
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -24,7 +25,7 @@ apiClient.interceptors.response.use(
   (error) => {
     error.message = normalizeError(error);
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;
