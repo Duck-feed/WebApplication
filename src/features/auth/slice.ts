@@ -3,6 +3,7 @@ import type { RootState } from "@/app/store";
 import type { User } from "./types";
 import { authApi } from "./api";
 import { jwtDecode } from "jwt-decode";
+import { normalizeError } from "@/lib/utils";
 
 export interface AuthState {
   user: User | null;
@@ -38,6 +39,7 @@ export const loginUser = createAsyncThunk(
   ) => {
     try {
       const { accessToken, refreshToken } = await authApi.login(email, password);
+
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       sessionStorage.removeItem("accessToken");
@@ -47,15 +49,16 @@ export const loginUser = createAsyncThunk(
       storage.setItem("accessToken", accessToken);
       storage.setItem("refreshToken", refreshToken);
 
-      const decoded = jwtDecode<JwtPayload>(accessToken);
+      const decoded = jwtDecode<JwtPayload & { userId: string; email: string; role: string }>(accessToken);
       const user: User = {
         id: decoded.userId,
         email: decoded.email,
         roleId: decoded.role,
       };
+
       return { accessToken, refreshToken, user };
-    } catch (err: any) {
-      return rejectWithValue(err.message);
+    } catch (err: unknown) {
+      return rejectWithValue(normalizeError(err));
     }
   }
 );
@@ -81,8 +84,8 @@ export const logoutUser = createAsyncThunk(
     try {
       await authApi.logout();
       return;
-    } catch (err: any) {
-      return rejectWithValue(err.message);
+    } catch (err: unknown) {
+      return rejectWithValue(normalizeError(err));
     }
   }
 );

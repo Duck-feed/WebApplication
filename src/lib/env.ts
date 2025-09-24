@@ -1,13 +1,15 @@
-export const API_BASE_URL: string = (() => {
-  let url = "";
-  try {
-    // Access Vite env lazily so TS doesn't parse import.meta
-    // eslint-disable-next-line no-eval
-    const im: any = eval("import.meta");
-    url = im?.env?.VITE_API_URL || "";
-  } catch {}
-  if (!url && typeof process !== "undefined" && (process as any).env) {
-    url = (process as any).env.VITE_API_URL || "";
+const sanitizeUrl = (value: string | undefined): string | undefined => {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+};
+
+const getProcessEnvUrl = (): string | undefined => {
+  if (typeof process !== "undefined" && process.env) {
+    return sanitizeUrl(process.env.VITE_API_URL);
   }
-  return url;
-})();
+  return undefined;
+};
+
+export const API_BASE_URL: string =
+  getProcessEnvUrl() ?? "";

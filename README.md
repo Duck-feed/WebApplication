@@ -1,154 +1,93 @@
-````markdown
-# Project Guide (A–Z)
+# WebApplication – Getting Started A to Z
 
-This project is built with **React + TypeScript + Vite**.  
-It uses **json-server** (serving data from `public/db.json`) for development and supports building/previewing in production mode.
+Frontend project built with **React 19**, **TypeScript**, and **Vite**. The UI layer uses Tailwind CSS, state is managed with Redux Toolkit, and Jest/Testing Library covers automated tests. This guide walks you through installing, running, testing, and building the app from scratch.
 
----
+## 1. System requirements
+- Node.js **20.x LTS** or newer (consider [nvm-windows](https://github.com/coreybutler/nvm-windows) to manage versions)
+- npm **10.x** or newer (ships with Node.js)
+- A modern browser (Chrome, Edge, Firefox, Safari) to verify the UI
 
-## 📋 Requirements
+## 2. Initial setup
+1. **Clone or download the repository**
+   ```bash
+   git clone YOUR_REPO_URL
+   cd WebApplication
+   ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-- Node.js **18+** (LTS recommended) and npm **9+**  
-- Default ports:  
-  - Vite: **5173**  
-  - JSON Server: **3001**
-
----
-
-## ⚙️ Environment Setup (Required)
-
-Before running the project, you **must** create a `.env` file in the project root.
-
-Create a new file `.env` with the following content:
+## 3. Configure environment variables
+Create a `.env` file in the project root (alongside `package.json`) and define the backend base URL:
 
 ```env
-VITE_API_URL=http://localhost:3001
-````
-
-👉 This variable is required for Axios to know where to fetch data in **dev mode**.
-In **prod mode**, the app automatically falls back to static `db.json` in `dist`.
-
----
-
-## 🔧 Installation
-
-Install dependencies:
-
-```bash
-npm install
+VITE_API_URL=http://localhost:5186/api
 ```
 
----
+`VITE_API_URL` should point at the API server that exposes endpoints such as `/users/auth/login`, `/posts`, and `/posts/{id}/like`. Adjust the value to match your backend environment (development, staging, production, etc.).
 
-## 🖥️ Run in Development
-
-1. Open **two terminals**:
-
-   * **Terminal 1** – start the fake API server:
-
-     ```bash
-     json-server --watch public\db.json --port 3001
-     ```
-
-   * **Terminal 2** – start the Vite dev server:
-
-     ```bash
-     npm run dev
-     ```
-
-2. Open in browser:
-   👉 [http://localhost:5173](http://localhost:5173)
-
----
-
-## 📦 Build & Preview (Production)
-
-* Build:
-
+## 4. Run the development server
+```bash
+npm run dev
+```
+- Vite serves the app at http://localhost:5173 by default.
+- To allow LAN access, forward the hostname:
   ```bash
-  npm run build
+  npm run dev -- --host
   ```
 
-* Preview after build:
-
+## 5. Quality checks
+- **Unit tests (one-off)**: `npm test`
+- **Watch mode**: `npm run test:watch`
+- **Coverage report**: `npm run test:coverage`
+- **Lint**: `npm run lint`
+- **Format code (Prettier + sort imports)**:
   ```bash
-  npm run preview:prod
+  npm run format
   ```
 
-The app runs at 👉 [http://localhost:4173](http://localhost:4173)
+## 6. Build and preview production output
+1. **Build the project**
+   ```bash
+   npm run build
+   ```
+2. **Preview locally**
+   ```bash
+   npm run preview
+   ```
+   or use the script that forces `VITE_API_URL=/` during the build:
+   ```bash
+   npm run preview:prod
+   ```
+   The preview server listens at http://localhost:4173.
 
-> In production preview mode, the app reads static data from `dist/db.json` (copied from `public/db.json`).
+## 7. Environment customization & CI/CD tips
+- Provide environment-specific `.env.*` files (for example `.env.production`) or set `VITE_API_URL` via system environment variables before running `npm run build`.
+- In CI/CD pipelines, run `npm ci` (or `npm install`), followed by `npm run build`. Add `npm test` and `npm run lint` steps based on your quality gates.
 
----
-
-## 📜 Useful Scripts
-
-| Command                 | Description                                   |
-| ----------------------- | --------------------------------------------- |
-| `npm run dev`           | Start Vite dev server (requires `.env.local`) |
-| `npm run build`         | Build TypeScript and bundle with Vite         |
-| `npm run preview`       | Preview build (default Vite preview)          |
-| `npm run preview:prod`  | Build in prod mode and preview                |
-| `npm test`              | Run Jest tests once                           |
-| `npm run test:watch`    | Run Jest tests in watch mode                  |
-| `npm run test:coverage` | Generate test coverage report                 |
-| `npm run lint`          | Run ESLint                                    |
-
----
-
-## 📡 Mock API (json-server)
-
-* Data file: `public/db.json`
-
-Sample endpoints (GET):
-
-* [http://localhost:3001/posts](http://localhost:3001/posts)
-* [http://localhost:3001/users](http://localhost:3001/users)
-* [http://localhost:3001/posts/1](http://localhost:3001/posts/1)
-* [http://localhost:3001/users/1](http://localhost:3001/users/1)
-
----
-
-## 🛠️ Troubleshooting
-
-* **Port already in use**: change port in JSON server (e.g., `--port 4000`) and update `VITE_API_URL` in `.env.local`.
-* **json-server not installed**: run with `npx json-server ...` (no global install required). To install globally:
-
-  ```bash
-  npm i -g json-server
-  ```
-* **CORS issues**: json-server enables CORS by default. If blocked by proxy/firewall, try another port.
-* **Encoding issues (Vietnamese characters)**: save `db.json` as UTF-8 (without BOM).
-
----
-
-## 📂 Project Structure
-
+## 8. Project structure (high level)
 ```plaintext
 WebApplication/
-├── public/
-│   └── db.json              # Mock database (json-server)
+├── public/                # Static assets (favicon, db.json sample, ...)
 ├── src/
-│   ├── app/                 # Redux store, hooks, routes, providers
-│   ├── components/          # Common UI, layout, icons, UI kit
-│   ├── features/            # Business features (auth, post)
-│   ├── layouts/             # RootLayout, MainLayout
-│   ├── lib/                 # API client (axios), utils
-│   ├── pages/               # Page-level components (NewFeed)
-│   ├── types/               # Shared TypeScript types
-│   ├── App.tsx              # Root app component
-│   └── main.tsx             # Application entrypoint
-├── index.html               # Base HTML
-├── package.json             # Scripts & dependencies
-├── tailwind.config.js       # TailwindCSS config
-├── vite.config.ts           # Vite config
-└── eslint.config.js         # ESLint config
+│   ├── app/               # Routing, providers, Redux store setup
+│   ├── components/        # Reusable UI building blocks
+│   ├── features/          # Feature modules (auth, post, ...)
+│   ├── layouts/           # Shared layouts
+│   ├── lib/               # API client and utilities
+│   ├── pages/             # Route-level screens
+│   └── index.css          # Tailwind entry point & global styles
+├── package.json           # Scripts & dependencies
+├── tsconfig*.json         # TypeScript configurations
+├── vite.config.ts         # Vite setup and `@` alias resolution
+└── README.md              # This documentation
 ```
 
----
+## 9. Troubleshooting
+- **Invalid `VITE_API_URL` or backend offline**: requests return 4xx/5xx; check the browser console and ensure the API is reachable.
+- **Port 5173 already in use**: start Vite on another port with `npm run dev -- --port 5174`.
+- **Write-permission errors**: run your terminal with appropriate permissions or work inside a writable directory.
+- **TypeScript/ESLint failures**: run `npm run lint` or `npm run build` to inspect errors and follow the guidance shown in the console.
 
-## 🎉 Final Notes
-
-✅ Always set up `.env.local` before starting the app.
-✅ Start **json-server** + **Vite dev server** in parallel.
-🚀 Now you’re ready to run DuckFeed!
+Happy building! 🚀

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { normalizeError, paramsSerializer } from "@/lib/utils";
 import { API_BASE_URL } from "./env";
+import type { InternalAxiosRequestConfig } from "axios";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -12,11 +13,13 @@ const apiClient = axios.create({
   paramsSerializer,
 });
 
-apiClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
-  if (token && !(config.headers && (config.headers as any).Authorization)) {
-    config.headers.Authorization = `Bearer ${token}`;
+
+  if (token && !config.headers?.has("Authorization")) {
+    config.headers?.set("Authorization", `Bearer ${token}`);
   }
+
   return config;
 });
 
