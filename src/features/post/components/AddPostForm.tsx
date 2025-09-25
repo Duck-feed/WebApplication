@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { GoSmiley } from "react-icons/go";
 import { IoImageOutline } from "react-icons/io5";
 import TextareaAutosize from "react-textarea-autosize";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { UserAvatar } from "@/components/common/UserAvatar";
 import EmojiPicker from "@/components/emoji/EmojiPicker";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,9 @@ export default function AddPostForm() {
     watch,
     formState: { errors },
   } = useFormContext<CreatePostCommand>();
+
+  const { user } = useAuth();
+  const displayName = user?.profileName || user?.username || "Guest";
 
   const content = watch("content") ?? "";
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -49,16 +53,12 @@ export default function AddPostForm() {
     <div className="flex flex-row gap-1 w-full mt-2">
       {/* Avatar */}
       <div className="flex flex-start mt-1 mb-2 mr-2">
-        <UserAvatar
-          src="https://ruinmyweek.com/wp-content/uploads/2020/09/the-is-for-me-meme-calls-out-history-greediest-villains-1.jpg"
-          name="sample name"
-          size="md"
-        />
+        <UserAvatar src={user?.avatar || undefined} name={displayName} size="md" />
       </div>
 
       {/* Input + Tools */}
       <div className="flex-1 mr-3 sm:mr-6 md:mr-12">
-        <span className="font-semibold">sample_name</span>
+        <span className="font-semibold">{displayName}</span>
 
         <TextareaAutosize
           {...register("content")}

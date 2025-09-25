@@ -1,13 +1,19 @@
 export interface User {
   id: string;
-  username?: string;
-  roleId: string;
-  firstName?: string;
-  lastName?: string;
+  username: string;
   email: string;
-  avatar?: string;
-  bio?: string;
+  firstName: string;
+  lastName: string;
+  profileName: string;
+  avatar: string;
+  bio: string;
+  roleName: string;
+  status: string;
+  noFollowers: number;
+  noFollowing: number;
+  createdAt: string;
 }
+
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
