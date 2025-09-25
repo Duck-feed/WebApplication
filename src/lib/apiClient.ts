@@ -1,4 +1,4 @@
-import axios from "axios";
+﻿import axios from "axios";
 import { normalizeError, paramsSerializer } from "@/lib/utils";
 import { API_BASE_URL } from "./env";
 import type { InternalAxiosRequestConfig } from "axios";
@@ -17,7 +17,7 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
 
   if (token && !config.headers?.has("Authorization")) {
-    config.headers?.set("Authorization", `Bearer ${token}`);
+    config.headers?.set("Authorization", `${token}`);
   }
 
   return config;

@@ -10,9 +10,9 @@ export default function NewFeed() {
     <div className="flex flex-col items-center gap-3">
       <FeedHeader />
       <AddPostCard></AddPostCard>
-      {posts.map((post) => (
+      {/* {posts.map((post) => (
         <PostCard key={post.id} {...post}></PostCard>
-      ))}
+      ))} */}
     </div>
   );
 }
