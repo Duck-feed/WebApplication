@@ -50,3 +50,23 @@ export const paramsSerializer = (params: Record<string, ParamValue>) => {
 
   return queryStrings.join("&");
 };
+
+export function timeAgo(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = (now.getTime() - date.getTime()) / 1000; // tính bằng giây
+
+  if (diff < 60) {
+    return `${Math.floor(diff)} giây trước`;
+  } else if (diff < 3600) {
+    return `${Math.floor(diff / 60)} phút trước`;
+  } else if (diff < 86400) {
+    return `${Math.floor(diff / 3600)} giờ trước`;
+  } else if (diff < 2592000) {
+    return `${Math.floor(diff / 86400)} ngày trước`;
+  } else if (diff < 31104000) {
+    return `${Math.floor(diff / 2592000)} tháng trước`;
+  } else {
+    return `${Math.floor(diff / 31104000)} năm trước`;
+  }
+}
