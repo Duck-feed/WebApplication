@@ -14,6 +14,20 @@ jest.mock("sonner", () => ({
   },
 }));
 
+
+jest.mock("@/features/auth/hooks/useAuth", () => ({
+  __esModule: true,
+  useAuth: () => ({
+    user: {
+      profileName: null,
+      username: "sample_name",
+      avatar: "https://example.com/avatar.png",
+    },
+    loading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+  }),
+}));
 describe("🧪 Add Post Modal component test", () => {
   test("renders when open", () => {
     render(<AddPostModal isOpen={true} />);

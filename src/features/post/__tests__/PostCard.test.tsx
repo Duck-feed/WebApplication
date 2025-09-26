@@ -1,24 +1,50 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import PostCard from "../components/PostCard";
 
+jest.mock("@/lib/utils", () => {
+  const actual = jest.requireActual("@/lib/utils");
+  return {
+    ...actual,
+    timeAgo: jest.fn(() => "2h ago"),
+  };
+});
+
+const { timeAgo } = jest.requireMock("@/lib/utils") as { timeAgo: jest.Mock };
+
 const mockPost = {
-  id: 1,
-  author: "John Doe",
-  avatar: "https://via.placeholder.com/40",
-  time: "2h ago",
+  id: "post-123",
   content: "This is a test post",
-  images: ["https://via.placeholder.com/100"],
-  likes: 5,
-  comments: 3,
+  publishedAt: new Date().toISOString(),
+  author: {
+    id: "user-1",
+    userName: "john.doe",
+    fullName: "John Doe",
+    avatarUrl: "https://via.placeholder.com/40",
+  },
+  media: [
+    {
+      id: "media-1",
+      url: "https://via.placeholder.com/100",
+      type: "image",
+      order: 0,
+    },
+  ],
+  commentCount: 3,
+  reactionCount: 5,
+  isReactedByCurrentUser: false,
 };
 
 describe("PostCard", () => {
+  beforeEach(() => {
+    timeAgo.mockClear();
+  });
+
   it("renders author, content, time, likes and comments", () => {
     render(<PostCard {...mockPost} />);
 
-    expect(screen.getByText(mockPost.author)).toBeInTheDocument();
+    expect(screen.getByText(mockPost.author.fullName)).toBeInTheDocument();
     expect(screen.getByText(mockPost.content)).toBeInTheDocument();
-    expect(screen.getByText(mockPost.time)).toBeInTheDocument();
+    expect(timeAgo).toHaveBeenCalledWith(mockPost.publishedAt);
     expect(screen.getByText("5")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
   });
@@ -29,11 +55,9 @@ describe("PostCard", () => {
     const likeButton = screen.getByText("5").closest("button");
     expect(likeButton).toBeTruthy();
 
-    // Click once -> likes + 1
     fireEvent.click(likeButton!);
     expect(screen.getByText("6")).toBeInTheDocument();
 
-    // Click again -> likes back
     fireEvent.click(likeButton!);
     expect(screen.getByText("5")).toBeInTheDocument();
   });
@@ -41,12 +65,11 @@ describe("PostCard", () => {
   it("alerts when image is clicked and not dragging", () => {
     render(<PostCard {...mockPost} />);
 
-    // Mock window.alert
     const alertMock = jest.spyOn(window, "alert").mockImplementation(() => {});
 
     const img = screen.getByAltText("post-img-0");
     fireEvent.click(img);
-    expect(alertMock).toHaveBeenCalledWith("Open image: " + mockPost.images[0]);
+    expect(alertMock).toHaveBeenCalledWith("Open image: " + mockPost.media[0].url);
 
     alertMock.mockRestore();
   });

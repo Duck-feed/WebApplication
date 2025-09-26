@@ -3,10 +3,11 @@ import { type HTMLAttributes } from "react";
 import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 type NotificationButtonProps = HTMLAttributes<HTMLDivElement>;
 
-const NotificationButton = (props: NotificationButtonProps) => {
+const NotificationButton = ({ className, ...props }: NotificationButtonProps) => {
   const location = useLocation();
   const { countUnseen } = useSelector((state: RootState) => state.notification);
 
@@ -15,13 +16,16 @@ const NotificationButton = (props: NotificationButtonProps) => {
   return (
     <div
       {...props}
-      className={
-        "group flex items-center justify-center rounded-lg cursor-pointer hover:bg-[rgba(0,0,0,0.035)] mx-1 p-3 w-16"
-      }
+      className={cn(
+        "group flex items-center justify-center rounded-lg cursor-pointer hover:bg-[rgba(0,0,0,0.035)]",
+        className
+      )}
     >
       <div className="relative">
         <FaBell
-          className={`w-[25px] h-[25px] ${isActive ? "bg-[rgba(0,0,0,0.035)]" : "text-gray-400"}`}
+          className={`w-[25px] h-[25px] ${
+            isActive ? "text-black" : "text-gray-400"
+          }`}
         />
         {countUnseen > 0 && (
           <span

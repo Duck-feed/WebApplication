@@ -57,16 +57,16 @@ export function timeAgo(dateString: string): string {
   const diff = (now.getTime() - date.getTime()) / 1000; // tính bằng giây
 
   if (diff < 60) {
-    return `${Math.floor(diff)} giây trước`;
+    return `${Math.floor(diff)} sensond ago`;
   } else if (diff < 3600) {
-    return `${Math.floor(diff / 60)} phút trước`;
+    return `${Math.floor(diff / 60)} minutes ago`;
   } else if (diff < 86400) {
-    return `${Math.floor(diff / 3600)} giờ trước`;
+    return `${Math.floor(diff / 3600)} hours ago`;
   } else if (diff < 2592000) {
-    return `${Math.floor(diff / 86400)} ngày trước`;
+    return `${Math.floor(diff / 86400)} days ago`;
   } else if (diff < 31104000) {
-    return `${Math.floor(diff / 2592000)} tháng trước`;
+    return `${Math.floor(diff / 2592000)} months ago`;
   } else {
-    return `${Math.floor(diff / 31104000)} năm trước`;
+    return `${Math.floor(diff / 31104000)} years ago`;
   }
 }
