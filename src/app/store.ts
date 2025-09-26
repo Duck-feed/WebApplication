@@ -1,14 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { postReducer } from "@/features/post";
 import { authReducer } from "@/features/auth";
+import { notificationReducer } from "@/features/notification";
 
 export const store = configureStore({
   reducer: {
     post: postReducer,
-    auth: authReducer
+    auth: authReducer,
+    notification: notificationReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

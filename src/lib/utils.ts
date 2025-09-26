@@ -1,6 +1,72 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
+}
+
+/**
+ * Normalize error object to a readable string message
+ */
+export function normalizeError(error: unknown): string {
+  const err = error as { response?: { data?: any } } | undefined;
+  const data = err?.response?.data;
+
+  if (!data) return "Network error, Please try again";
+
+  if (data.errors) {
+    if (typeof data.errors === "string") return data.errors;
+
+    if (typeof data.errors === "object") {
+      const messages = Object.values(data.errors).flat();
+      return (messages as string[]).join(", ");
+    }
+  }
+
+  if (typeof data.message === "string") return data.message;
+
+  return "Something went wrong, Please try again";
+}
+
+/**
+ * Serialize params object to query string
+ */
+type ParamPrimitive = string | number | boolean;
+type ParamValue = ParamPrimitive | ParamPrimitive[];
+
+export const paramsSerializer = (params: Record<string, ParamValue>) => {
+  const queryStrings: string[] = [];
+
+  for (const key in params) {
+    const value = params[key];
+    if (Array.isArray(value)) {
+      value.forEach((v) => {
+        queryStrings.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(v))}`);
+      });
+    } else {
+      queryStrings.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+    }
+  }
+
+  return queryStrings.join("&");
+};
+
+export function timeAgo(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = (now.getTime() - date.getTime()) / 1000; // tính bằng giây
+
+  if (diff < 60) {
+    return `${Math.floor(diff)} sensond ago`;
+  } else if (diff < 3600) {
+    return `${Math.floor(diff / 60)} minutes ago`;
+  } else if (diff < 86400) {
+    return `${Math.floor(diff / 3600)} hours ago`;
+  } else if (diff < 2592000) {
+    return `${Math.floor(diff / 86400)} days ago`;
+  } else if (diff < 31104000) {
+    return `${Math.floor(diff / 2592000)} months ago`;
+  } else {
+    return `${Math.floor(diff / 31104000)} years ago`;
+  }
 }

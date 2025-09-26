@@ -1,62 +1,37 @@
-import axios from "axios";
-
-const isDev = import.meta.env.DEV;
+﻿import axios from "axios";
+import { normalizeError, paramsSerializer } from "@/lib/utils";
+import { API_BASE_URL } from "./env";
+import type { InternalAxiosRequestConfig } from "axios";
 
 const apiClient = axios.create({
-  baseURL: isDev ? import.meta.env.VITE_API_URL : "/", // Dev: json-server, Prod: static db.json
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+  paramsSerializer,
 });
 
-// Request interceptor
-apiClient.interceptors.request.use((config) => {
-  if (!isDev) {
-    // Trong prod → ép mọi request về db.json
-    config.url = "/db.json";
+apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+
+  if (token && !config.headers?.has("Authorization")) {
+    config.headers?.set("Authorization", `${token}`);
   }
+
   return config;
 });
 
-// Response interceptor
-apiClient.interceptors.response.use((response) => {
-  if (!isDev && response.config.url === "/db.json") {
-    const data = response.data;
-
-    // Xác định endpoint gốc ban đầu
-    const originalUrl = response.config.headers["x-original-url"] as string;
-
-    if (originalUrl?.startsWith("/posts/")) {
-      const id = originalUrl.split("/")[2];
-      return { ...response, data: data.posts.find((p: any) => String(p.id) === id) };
-    }
-
-    if (originalUrl?.startsWith("/users/")) {
-      const id = originalUrl.split("/")[2];
-      return { ...response, data: data.users.find((u: any) => String(u.id) === id) };
-    }
-
-    if (originalUrl?.startsWith("/posts")) {
-      return { ...response, data: data.posts };
-    }
-
-    if (originalUrl?.startsWith("/users")) {
-      return { ...response, data: data.users };
-    }
-  }
-
-  return response;
-});
-
-// Trick: lưu originalUrl trước khi chuyển hướng
-apiClient.interceptors.request.use((config) => {
-  if (!isDev) {
-    config.headers["x-original-url"] = config.url || "";
-    config.url = "/db.json";
-  }
-  return config;
-});
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    error.message = normalizeError(error);
+    return Promise.reject(error);
+  },
+);
 
 export default apiClient;
+
+
+

@@ -1,7 +1,10 @@
-import { motion } from "framer-motion"
-import SettingIcon from "@/components/icons/SettingIcon"
-import NavItem from "./NavItem"
-import { navItems } from "./navItems"
+import SettingIcon from "@/components/icons/SettingIcon";
+import NotificationButton from "@/features/notification/components/NoticationButton";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import NavItem from "./NavItem";
+import { navItems } from "./navItems";
+import SettingsMenu from "./SettingsMenu";
 
 export function MobileTopbar() {
   return (
@@ -10,19 +13,24 @@ export function MobileTopbar() {
         <img src="/assets/logo.png" alt="logo" className="w-24 h-16" />
       </div>
       <div className="flex items-center w-10 cursor-pointer ml-auto">
-        <div className="[transform:rotateY(180deg)]">
-          <SettingIcon />
-        </div>
+        <SettingsMenu
+          align="end"
+          trigger={
+            <div className="[transform:rotateY(180deg)]">
+              <SettingIcon />
+            </div>
+          }
+        />
       </div>
     </div>
-  )
+  );
 }
 
 interface MobileBottombarProps {
-  active: string
-  setActive: (id: string) => void
-  setIsOpen: (v: boolean) => void
-  showNavbar: boolean
+  active: string;
+  setActive: (id: string) => void;
+  setIsOpen: (v: boolean) => void;
+  showNavbar: boolean;
 }
 
 export function MobileBottombar({
@@ -31,6 +39,8 @@ export function MobileBottombar({
   setIsOpen,
   showNavbar,
 }: MobileBottombarProps) {
+  const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ y: 0 }}
@@ -38,19 +48,30 @@ export function MobileBottombar({
       transition={{ duration: 0.3 }}
       className="mobile:hidden fixed bottom-0 left-0 right-0 bg-white/70 backdrop-blur-lg border-t flex justify-around items-center h-16 z-10"
     >
-      {navItems(setIsOpen).map(({ id, icon: Icon, onClick }) => (
-        <NavItem
-          key={id}
-          id={id}
-          Icon={Icon}
-          active={active}
-          className="flex-1 mx-1 p-3"
-          onClick={() => {
-            setActive(id)
-            onClick?.()
-          }}
-        />
-      ))}
+      {navItems(navigate, setIsOpen).map(({ id, icon: Icon, onClick }) =>
+        id !== "bell" ? (
+          <NavItem
+            key={id}
+            id={id}
+            Icon={Icon}
+            active={active}
+            className="flex-1 mx-1 p-3"
+            onClick={() => {
+              setActive(id);
+              onClick?.();
+            }}
+          />
+        ) : (
+          <NotificationButton
+            key={id}
+            onClick={() => {
+              setActive(id);
+              onClick?.();
+            }}
+            className="flex-1 mx-1 p-3 flex items-center justify-center"
+          />
+        ),
+      )}
     </motion.div>
-  )
+  );
 }

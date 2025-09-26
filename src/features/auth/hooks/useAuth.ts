@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
-import { logout, selectAuthUser, selectAuthLoading } from "../slice";
+import { logoutUser, loginUser, selectAuthUser, selectAuthLoading } from "../slice";
 
 export function useAuth() {
   const dispatch = useAppDispatch();
@@ -9,6 +9,9 @@ export function useAuth() {
   return {
     user,
     loading,
-    logout: () => dispatch(logout()),
+    login: (e: string, p: string, r: boolean = false) =>
+      dispatch(loginUser({ email: e, password: p, remember: r })),
+    logout: () => dispatch(logoutUser()),
   };
 }
+
