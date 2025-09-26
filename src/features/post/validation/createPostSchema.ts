@@ -1,10 +1,15 @@
 // features/post/validation/createPostSchema.ts
 import { z } from "zod";
+import { PostVisibility } from "../constant";
 
 export const createPostSchema = z
   .object({
     content: z.string().max(1000, "Content must be at most 1000 characters").optional(),
-    visibility: z.string().min(1, "Visibility is required"),
+    visibility: z.union([
+      z.literal(PostVisibility.ONLY_ME),
+      z.literal(PostVisibility.PUBLIC_ALL),
+      z.literal(PostVisibility.PUBLIC_FRIEND),
+    ]),
     media: z
       .array(
         z.object({

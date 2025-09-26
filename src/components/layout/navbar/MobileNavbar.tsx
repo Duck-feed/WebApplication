@@ -68,6 +68,7 @@ export function MobileBottombar({
               setActive(id);
               onClick?.();
             }}
+            className="flex-1 mx-1 p-3 flex items-center justify-center"
           />
         ),
       )}

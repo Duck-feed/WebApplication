@@ -13,5 +13,5 @@ export const navItems = (
   { id: "search", icon: SearchIcon, onClick: () => console.log("Search something") },
   { id: "plus", icon: PlusIcon, onClick: () => setIsOpen(true) },
   { id: "bell", icon: BellIcon, onClick: () => navigate("/notifications") },
-  { id: "profile", icon: ProfileIcon, onClick: () => console.log("Go Profile") },
+  { id: "profile", icon: ProfileIcon, onClick: () => navigate("/profile") },
 ];

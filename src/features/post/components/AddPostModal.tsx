@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import AddPostForm from "@/features/post/components/AddPostForm";
-import { POST_VISIBILITY } from "@/features/post/constant";
+import { PostVisibility } from "@/features/post/constant";
 import { createPostSchema } from "@/features/post/validation/createPostSchema";
 import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 import { createPost } from "../api";
@@ -33,7 +33,7 @@ export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostM
     mode: "onChange",
     defaultValues: {
       content: "",
-      visibility: "PUBLIC_ALL",
+      visibility: PostVisibility.PUBLIC_ALL,
       media: [],
     },
   });
@@ -63,7 +63,7 @@ export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostM
 
       reset({
         content: "",
-        visibility: POST_VISIBILITY.PUBLIC_ALL,
+        visibility: PostVisibility.PUBLIC_ALL,
         media: [],
       });
     } catch (e) {

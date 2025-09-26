@@ -1,23 +1,43 @@
 // features/post/types.ts
+export interface PostAuthor {
+  id: string;
+  userName: string | null;
+  fullName: string | null;
+  avatarUrl: string | null;
+}
+
+export interface PostMedia {
+  id: string;
+  url: string;
+  type: string;
+  order: number;
+}
+
 export interface Post {
-  id: number;
-  author: string;
-  avatar: string;
-  time: string;
-  images: string[];
+  id: string;
   content: string;
-  likes: number;
-  comments: number;
+  publishedAt: string;
+  author: PostAuthor;
+  media: PostMedia[];
+  commentCount: number;
+  reactionCount: number;
+  isReactedByCurrentUser: boolean;
 }
 
-export interface CreatePostDto {
-  content: string;
-  media?: Media[];
-  visibility: string;
+export interface NewsfeedPagination {
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalItems: number;
 }
 
-export interface Media {
-  mediaId: string;
-  mediaUrl: string;
-  mediaType: string;
+export interface NewsfeedResponse {
+  posts: Post[];
+  pagination: NewsfeedPagination;
+}
+
+export interface NewsfeedQuery {
+  page?: number;
+  pageSize?: number;
+  sortField?: string;
 }

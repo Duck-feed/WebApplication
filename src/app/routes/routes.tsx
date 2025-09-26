@@ -3,6 +3,7 @@ import RootLayout from "@/layouts/RootLayout";
 import Login from "@/pages/Login";
 import NewFeed from "@/pages/NewFeed";
 import NotificationPage from "@/pages/Notifications";
+import ProfilePage from "@/pages/Profile";
 import type { RouteObject } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
@@ -25,6 +26,7 @@ export const routes: RouteObject[] = [
             children: [
               { index: true, element: <NewFeed /> }, // /
               { path: "/notifications", element: <NotificationPage /> },
+              { path: "/profile", element: <ProfilePage /> },
             ],
           },
         ],
@@ -32,3 +34,4 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
+

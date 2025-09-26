@@ -14,11 +14,26 @@ jest.mock("@/components/emoji/EmojiPicker", () => ({
   ),
 }));
 
+
+jest.mock("@/features/auth/hooks/useAuth", () => ({
+  __esModule: true,
+  useAuth: () => ({
+    user: {
+      profileName: null,
+      username: "sample_name",
+      avatar: "https://example.com/avatar.png",
+    },
+    loading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+  }),
+}));
+
 function FormWrapper({ children }: { children: React.ReactNode }) {
   const methods = useForm<CreatePostCommand>({
     defaultValues: {
       content: "",
-      visibility: "PUBLIC_ALL",
+      visibility: 1,
       media: [],
     },
     mode: "onBlur", // validate on blur

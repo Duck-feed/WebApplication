@@ -40,6 +40,7 @@ export default function DesktopSidebar({ active, setActive, setIsOpen }: Sidebar
                 setActive(id);
                 onClick?.();
               }}
+              className="mx-1 p-3 w-16"
             />
           ),
         )}
