@@ -14,7 +14,7 @@ const NotificationPage = () => {
   const { items } = useNotification();
   const { countUnseen } = useSelector((state: RootState) => state.notification);
   const dispatch = useDispatch<AppDispatch>();
-  const [paginationParams, setParams] = useState<object>({
+  const [paginationParams] = useState<object>({
     page: 1,
     pageSize: 20,
     sortBy: "createdAt",

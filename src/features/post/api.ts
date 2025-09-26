@@ -1,6 +1,6 @@
+import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 import apiClient from "@/lib/apiClient";
 import type { Post, NewsfeedQuery, NewsfeedResponse } from "./types";
-import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 
 type ResolvedNewsfeedQuery = {
   page: number;

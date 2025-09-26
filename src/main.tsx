@@ -13,6 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <App />
       </BrowserRouter>
     </ReduxProvider>
-    <Toaster toastOptions={{ className: "z-50" }} />
+    <Toaster />
   </React.StrictMode>,
 );

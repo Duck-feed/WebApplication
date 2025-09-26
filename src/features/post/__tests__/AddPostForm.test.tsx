@@ -33,7 +33,7 @@ function FormWrapper({ children }: { children: React.ReactNode }) {
   const methods = useForm<CreatePostCommand>({
     defaultValues: {
       content: "",
-      visibility: "PUBLIC_ALL",
+      visibility: 1,
       media: [],
     },
     mode: "onBlur", // validate on blur
