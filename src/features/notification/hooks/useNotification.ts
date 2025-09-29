@@ -1,15 +1,19 @@
-import type { AppDispatch, RootState } from "@/app/store";
+import { useAppSelector } from "@/app/hooks/redux";
+import type { AppDispatch } from "@/app/store";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { selectAuthUser } from "@/features/auth/slice";
 import { countUnseenNotificationThunk } from "../slice";
 
 export const useNotification = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { items, countUnRead } = useSelector((state: RootState) => state.notification);
+  const { items, countUnRead } = useAppSelector((state) => state.notification);
+  const userId = useAppSelector(selectAuthUser)?.id;
 
   useEffect(() => {
-    dispatch(countUnseenNotificationThunk("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"));
-  }, [dispatch]);
+    if (!userId) return;
+    dispatch(countUnseenNotificationThunk(userId));
+  }, [dispatch, userId]);
 
   return {
     items,

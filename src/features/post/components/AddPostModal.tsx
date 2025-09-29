@@ -54,7 +54,6 @@ export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostM
       const result = await toast
         .promise(createPost(data), {
           loading: "Posting...",
-          success: "Post created successfully!",
           error: (e) => e?.message || "Something went wrong. Please try again.",
         })
         .unwrap();
