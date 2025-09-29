@@ -1,16 +1,18 @@
-import type { AppDispatch } from "@/app/store";
+import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
 import Navbar from "@/components/layout/navbar/Navbar";
+import { selectAuthUser } from "@/features/auth/slice";
 import { countUnseenNotificationThunk } from "@/features/notification/slice";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector(selectAuthUser)?.id;
 
   useEffect(() => {
-    dispatch(countUnseenNotificationThunk("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"));
-  }, [dispatch]);
+    if (!userId) return;
+    dispatch(countUnseenNotificationThunk(userId));
+  }, [dispatch, userId]);
 
   return (
     <div>

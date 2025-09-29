@@ -1,19 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { toast } from "sonner";
 import { createPost } from "../api";
 import AddPostModal from "../components/AddPostModal";
 
 jest.mock("../api");
-jest.mock("sonner", () => ({
-  __esModule: true,
-  toast: {
-    promise: jest.fn(() => ({
-      unwrap: jest.fn().mockResolvedValue("ok"),
-    })),
-  },
-}));
-
 
 jest.mock("@/features/auth/hooks/useAuth", () => ({
   __esModule: true,
@@ -28,7 +18,8 @@ jest.mock("@/features/auth/hooks/useAuth", () => ({
     logout: jest.fn(),
   }),
 }));
-describe("🧪 Add Post Modal component test", () => {
+
+describe("Add Post Modal component test", () => {
   test("renders when open", () => {
     render(<AddPostModal isOpen={true} />);
     expect(screen.getByText("New post")).toBeInTheDocument();
@@ -65,68 +56,37 @@ describe("🧪 Add Post Modal component test", () => {
   });
 });
 
-describe("🧪 Add Post Modal API test", () => {
+describe("Add Post Modal API test", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Make toast.promise return an object with .unwrap(), matching component usage
-    (toast.promise as jest.Mock).mockImplementation((promise: Promise<unknown>) => ({
-      unwrap: () => promise,
-    }));
   });
 
-  test("shows loading toast when posting", async () => {
-    const pending = new Promise(() => {});
-    (createPost as jest.Mock).mockReturnValue(pending);
+  test("submits post data through the API", async () => {
+    (createPost as jest.Mock).mockResolvedValue({ id: "mock-id" });
 
     render(<AddPostModal isOpen={true} />);
 
     const textarea = screen.getByPlaceholderText("What's on your mind?");
-
     await userEvent.type(textarea, "hello world");
     await userEvent.tab();
 
     const postBtn = screen.getByRole("button", { name: /post/i });
-
     await waitFor(() => expect(postBtn).toBeEnabled());
 
     await userEvent.click(postBtn);
 
     await waitFor(() => {
-      expect(toast.promise).toHaveBeenCalledWith(
-        expect.any(Promise),
-        expect.objectContaining({ loading: "Posting..." }),
-      );
-    });
-  });
-
-  test("shows success toast on post success", async () => {
-    (createPost as jest.Mock).mockResolvedValue("mock-result");
-
-    render(<AddPostModal isOpen={true} />);
-
-    const textarea = screen.getByPlaceholderText("What's on your mind?");
-    await userEvent.type(textarea, "Test content");
-    await userEvent.tab(); // trigger RHF validation
-
-    const postBtn = screen.getByRole("button", { name: /post/i });
-    await waitFor(() => expect(postBtn).toBeEnabled());
-
-    await userEvent.click(postBtn);
-
-    await waitFor(() => {
-      expect(toast.promise).toHaveBeenCalledWith(
-        expect.any(Promise),
+      expect(createPost).toHaveBeenCalledWith(
         expect.objectContaining({
-          success: "Post created successfully!",
+          content: "hello world",
         }),
       );
     });
   });
 
-  test("shows error toast on post failure", async () => {
+  test("reopens modal when submission fails", async () => {
     const rejectionError = new Error("Failed to post");
     (createPost as jest.Mock).mockRejectedValue(rejectionError);
-
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
     render(<AddPostModal isOpen />);
@@ -141,14 +101,19 @@ describe("🧪 Add Post Modal API test", () => {
     await userEvent.click(postBtn);
 
     await waitFor(() => {
-      expect(toast.promise).toHaveBeenCalledWith(
-        expect.any(Promise),
-        expect.objectContaining({ error: expect.any(Function) }),
+      expect(createPost).toHaveBeenCalledWith(
+        expect.objectContaining({
+          content: "Error post",
+        }),
       );
     });
 
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to post", rejectionError.message);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("New post")).toBeInTheDocument();
     });
 
     consoleErrorSpy.mockRestore();

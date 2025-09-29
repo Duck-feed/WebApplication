@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
-import { loadDefaultUser, selectAuthInitialized, selectAuthLoading } from "@/features/auth/slice";
-import { sampleUserId } from "@/features/notification";
+import { loadDefaultUser, selectAuthInitialized, selectAuthLoading, selectAuthUser } from "@/features/auth/slice";
 import { useSignalR } from "@/features/notification/hooks/useSignalR";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
@@ -9,7 +8,8 @@ export default function RootLayout() {
   const dispatch = useAppDispatch();
   const initialized = useAppSelector(selectAuthInitialized);
   const loading = useAppSelector(selectAuthLoading);
-  useSignalR(sampleUserId);
+  const userId = useAppSelector(selectAuthUser)?.id;
+  useSignalR(userId ?? "");
 
   useEffect(() => {
     if (!initialized) {

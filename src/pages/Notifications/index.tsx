@@ -1,19 +1,20 @@
-import type { AppDispatch, RootState } from "@/app/store";
+import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { selectAuthUser } from "@/features/auth/slice";
 import { markAsSeenMany, type UserNotification } from "@/features/notification";
 import { useNotification } from "@/features/notification/hooks/useNotification";
 import { getListNotificationThunk, setUnseenCount } from "@/features/notification/slice";
 import { timeAgo } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const NotificationPage = () => {
   const navigate = useNavigate();
   const { items } = useNotification();
-  const { countUnseen } = useSelector((state: RootState) => state.notification);
-  const dispatch = useDispatch<AppDispatch>();
+  const { countUnseen } = useAppSelector((state) => state.notification);
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector(selectAuthUser)?.id;
   const [paginationParams] = useState<object>({
     page: 1,
     pageSize: 20,
@@ -21,13 +22,14 @@ const NotificationPage = () => {
   });
 
   useEffect(() => {
+    if (!userId) return;
     dispatch(
       getListNotificationThunk({
-        userId: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+        userId,
         params: paginationParams,
       }),
     );
-  }, [dispatch, paginationParams]);
+  }, [dispatch, paginationParams, userId]);
 
   useEffect(() => {
     if (items.length > 0) {
