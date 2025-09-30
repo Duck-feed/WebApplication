@@ -2,11 +2,11 @@ import { UserAvatar } from "@/components/common/UserAvatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 
 type ProfileTab = "posts" | "media";
@@ -96,9 +96,7 @@ export default function ProfileCard({
               type="button"
               onClick={() => onChangeTab(tab.id)}
               className={`relative flex-1 py-3 text-sm font-semibold transition-colors ${
-                activeTab === tab.id
-                  ? "text-black"
-                  : "text-gray-500 hover:text-black"
+                activeTab === tab.id ? "text-black" : "text-gray-500 hover:text-black"
               }`}
             >
               {tab.label}

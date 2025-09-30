@@ -1,7 +1,7 @@
-import { useAppSelector } from "@/app/hooks/redux";
-import type { AppDispatch } from "@/app/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/app/hooks/redux";
+import type { AppDispatch } from "@/app/store";
 import { selectAuthUser } from "@/features/auth/slice";
 import { countUnseenNotificationThunk } from "../slice";
 

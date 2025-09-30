@@ -1,9 +1,9 @@
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
 import Navbar from "@/components/layout/navbar/Navbar";
 import { selectAuthUser } from "@/features/auth/slice";
 import { countUnseenNotificationThunk } from "@/features/notification/slice";
-import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();

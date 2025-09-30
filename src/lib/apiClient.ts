@@ -1,7 +1,7 @@
 ﻿import axios from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 import { normalizeError, paramsSerializer } from "@/lib/utils";
 import { API_BASE_URL } from "./env";
-import type { InternalAxiosRequestConfig } from "axios";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -32,6 +32,3 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
-
-
-

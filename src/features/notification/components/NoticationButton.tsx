@@ -1,8 +1,8 @@
-import type { RootState } from "@/app/store";
 import { type HTMLAttributes } from "react";
-import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import type { RootState } from "@/app/store";
+import BellIcon from "@/components/icons/BellIcon";
 import { cn } from "@/lib/utils";
 
 type NotificationButtonProps = HTMLAttributes<HTMLDivElement>;
@@ -18,15 +18,11 @@ const NotificationButton = ({ className, ...props }: NotificationButtonProps) =>
       {...props}
       className={cn(
         "group flex items-center justify-center rounded-lg cursor-pointer hover:bg-[rgba(0,0,0,0.035)]",
-        className
+        className,
       )}
     >
       <div className="relative">
-        <FaBell
-          className={`w-[25px] h-[25px] ${
-            isActive ? "text-black" : "text-gray-400"
-          }`}
-        />
+        <BellIcon active={isActive} />
         {countUnseen > 0 && (
           <span
             className="absolute -top-1 -right-1 flex items-center justify-center

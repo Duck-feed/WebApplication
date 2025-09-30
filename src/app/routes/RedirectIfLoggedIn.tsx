@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "@/app/hooks/redux";
-import { selectAuthUser, selectAuthLoading } from "@/features/auth/slice";
+import { selectAuthLoading, selectAuthUser } from "@/features/auth/slice";
 
 export default function RedirectIfLoggedIn() {
   const user = useAppSelector(selectAuthUser);

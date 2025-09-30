@@ -15,14 +15,14 @@ import { PostVisibility } from "@/features/post/constant";
 import { createPostSchema } from "@/features/post/validation/createPostSchema";
 import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 import { createPost } from "../api";
+import type { AddPostModalProps } from "../types";
 
-type AddPostModalProps = Readonly<{
-  isOpen: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
-  onClose?: () => void; // backward compatibility
-}>;
-
-export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostModalProps) {
+export default function AddPostModal({
+  isOpen,
+  onOpenChange,
+  onClose,
+  onPostCreated,
+}: AddPostModalProps) {
   const setOpen = (open: boolean) => {
     if (onOpenChange) onOpenChange(open);
     else if (!open) onClose?.();
@@ -59,6 +59,8 @@ export default function AddPostModal({ isOpen, onOpenChange, onClose }: AddPostM
         .unwrap();
 
       console.log("Post created:", result);
+
+      onPostCreated?.();
 
       reset({
         content: "",

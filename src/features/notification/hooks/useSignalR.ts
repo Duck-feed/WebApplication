@@ -1,9 +1,9 @@
-import type { AppDispatch } from "@/app/store";
-import { getSignalRConnection, initSignalRConnection } from "@/lib/signalR";
-import type { HubConnection } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
+import type { HubConnection } from "@microsoft/signalr";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import type { AppDispatch } from "@/app/store";
+import { getSignalRConnection, initSignalRConnection } from "@/lib/signalR";
 import { countUnseenNotificationThunk } from "../slice";
 import type { UserNotification } from "../types";
 

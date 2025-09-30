@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useAuth } from "@/features/auth/hooks/useAuth";
 import { UserAvatar } from "@/components/common/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import AddPostModal from "@/features/post/components/AddPostModal";
+import type { AddPostCardProps } from "../types";
 
-export default function AddPostCard() {
+export default function AddPostCard({ onPostCreated }: AddPostCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
 
@@ -40,7 +41,7 @@ export default function AddPostCard() {
       </Card>
 
       {/* Modal form */}
-      <AddPostModal isOpen={isOpen} onOpenChange={setIsOpen} />
+      <AddPostModal isOpen={isOpen} onOpenChange={setIsOpen} onPostCreated={onPostCreated} />
     </>
   );
 }

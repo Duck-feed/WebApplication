@@ -1,8 +1,8 @@
-import NotificationButton from "@/features/notification/components/NoticationButton";
 import { useNavigate } from "react-router-dom";
+import NotificationButton from "@/features/notification/components/NoticationButton";
 import NavItem from "./NavItem";
-import { navItems } from "./navItems";
 import SettingsMenu from "./SettingsMenu";
+import { navItems } from "./navItems";
 
 interface SidebarProps {
   active: string;
@@ -14,7 +14,7 @@ export default function DesktopSidebar({ active, setActive, setIsOpen }: Sidebar
   const navigate = useNavigate();
 
   return (
-    <div className="hidden mobile:flex flex-col fixed h-screen">
+    <div className="hidden mobile:flex flex-col fixed h-screen z-10">
       <div className="flex justify-center items-center p-4">
         <img src="/assets/logo.png" alt="logo" className="w-24 h-16" />
       </div>

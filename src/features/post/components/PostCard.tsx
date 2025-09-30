@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
-import { Card, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import HeartIcon from "@/components/icons/HeartIcon";
-import CommentIcon from "@/components/icons/CommentIcon";
-import MoreIcon from "@/components/icons/MoreIcon";
 import HorizontalScroll from "@/components/common/HorizontalScroll";
-import type { Post } from "../types";
+import CommentIcon from "@/components/icons/CommentIcon";
+import HeartIcon from "@/components/icons/HeartIcon";
+import MoreIcon from "@/components/icons/MoreIcon";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter } from "@/components/ui/card";
 import { timeAgo } from "@/lib/utils";
+import type { Post } from "../types";
 
 export default function PostCard({
   author,
@@ -53,7 +53,10 @@ export default function PostCard({
         <div className="flex-1">
           <div className="flex items-center justify-between pr-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-bold max-w-[150px] truncate cursor-pointer" title={displayAuthor}>
+              <span
+                className="font-bold max-w-[150px] truncate cursor-pointer"
+                title={displayAuthor}
+              >
                 {displayAuthor}
               </span>
               <span className="text-gray-500 text-sm">{displayTime}</span>

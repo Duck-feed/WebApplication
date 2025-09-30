@@ -13,7 +13,9 @@ export default function NewFeed() {
       <FeedHeader />
       <AddPostCard />
       {shouldShowSkeleton ? (
-        Array.from({ length: 3 }).map((_, index) => <PostCardSkeleton key={`newsfeed-post-skeleton-${index}`} />)
+        Array.from({ length: 3 }).map((_, index) => (
+          <PostCardSkeleton key={`newsfeed-post-skeleton-${index}`} />
+        ))
       ) : error ? (
         <div className="w-full max-w-[640px] text-center text-red-500">{error.message}</div>
       ) : posts.length > 0 ? (

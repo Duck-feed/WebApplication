@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { NewsfeedPagination, NewsfeedQuery, NewsfeedResponse, Post } from "./types";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getPersonalNewsfeed } from "./api";
+import type { NewsfeedPagination, NewsfeedQuery, NewsfeedResponse, Post } from "./types";
 
 interface PostState {
   items: Post[];
@@ -14,12 +14,12 @@ const initialState: PostState = {
   loading: false,
 };
 
-export const fetchPosts = createAsyncThunk<NewsfeedResponse, { userId: string; params?: NewsfeedQuery }>(
-  "post/fetchPosts",
-  async ({ userId, params }) => {
-    return await getPersonalNewsfeed(userId, params);
-  },
-);
+export const fetchPosts = createAsyncThunk<
+  NewsfeedResponse,
+  { userId: string; params?: NewsfeedQuery }
+>("post/fetchPosts", async ({ userId, params }) => {
+  return await getPersonalNewsfeed(userId, params);
+});
 
 const postSlice = createSlice({
   name: "post",

@@ -3,11 +3,11 @@ import { useFormContext } from "react-hook-form";
 import { GoSmiley } from "react-icons/go";
 import { IoImageOutline } from "react-icons/io5";
 import TextareaAutosize from "react-textarea-autosize";
-import { useAuth } from "@/features/auth/hooks/useAuth";
 import { UserAvatar } from "@/components/common/UserAvatar";
 import EmojiPicker from "@/components/emoji/EmojiPicker";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import type { CreatePostCommand } from "@/features/post/validation/createPostSchema";
 
 export default function AddPostForm() {

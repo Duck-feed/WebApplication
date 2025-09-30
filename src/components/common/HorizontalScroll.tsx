@@ -1,5 +1,5 @@
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useRef, useState, useEffect, useCallback, type ReactNode } from "react";
 
 type Props = {
   children: ReactNode;

@@ -1,34 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import type { NewsfeedPagination, NewsfeedQuery, Post } from "@/features/post/types";
 import { getPersonalNewsfeed } from "@/features/post/api";
+import type { NewsfeedPagination, NewsfeedQuery, Post } from "@/features/post/types";
+import { DEFAULT_QUERY } from "../constant";
+import type { ResolvedNewsfeedQuery, UsePostsResult } from "../types";
 
-type ResolvedNewsfeedQuery = {
-  page: number;
-  pageSize: number;
-  sortField: string;
-};
-
-const DEFAULT_QUERY: ResolvedNewsfeedQuery = {
-  page: 1,
-  pageSize: 10,
-  sortField: "PublishedAt",
-};
-
-type UsePostsResult = {
-  posts: Post[] | null;
-  pagination: NewsfeedPagination | null;
-  loading: boolean;
-  error: Error | null;
-  page: number;
-  pageSize: number;
-  sortField: string;
-  setPage: (page: number) => void;
-  setPageSize: (pageSize: number) => void;
-  setSortField: (sortField: string) => void;
-  refresh: () => void;
-};
-
-export function usePosts(userId: string | undefined, initialQuery: NewsfeedQuery = {}): UsePostsResult {
+export function usePosts(
+  userId: string | undefined,
+  initialQuery: NewsfeedQuery = {},
+): UsePostsResult {
   const mergedInitialQuery = useMemo<ResolvedNewsfeedQuery>(
     () => ({
       page: initialQuery.page ?? DEFAULT_QUERY.page,
@@ -66,7 +45,8 @@ export function usePosts(userId: string | undefined, initialQuery: NewsfeedQuery
       })
       .catch((err) => {
         if (!mounted) return;
-        const normalizedError = err instanceof Error ? err : new Error(String(err ?? "Failed to load posts"));
+        const normalizedError =
+          err instanceof Error ? err : new Error(String(err ?? "Failed to load posts"));
         setError(normalizedError);
       })
       .finally(() => {

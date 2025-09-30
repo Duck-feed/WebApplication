@@ -1,5 +1,6 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { User } from "@/features/auth/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -52,12 +53,15 @@ export const paramsSerializer = (params: Record<string, ParamValue>) => {
 };
 
 export function timeAgo(dateString: string): string {
-  const date = new Date(dateString);
+  const utcDate = new Date(dateString);
+
+  const gmt7Date = new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
+
   const now = new Date();
-  const diff = (now.getTime() - date.getTime()) / 1000; // tính bằng giây
+  const diff = (now.getTime() - gmt7Date.getTime()) / 1000;
 
   if (diff < 60) {
-    return `${Math.floor(diff)} sensond ago`;
+    return `${Math.floor(diff)} seconds ago`;
   } else if (diff < 3600) {
     return `${Math.floor(diff / 60)} minutes ago`;
   } else if (diff < 86400) {
@@ -69,4 +73,19 @@ export function timeAgo(dateString: string): string {
   } else {
     return `${Math.floor(diff / 31104000)} years ago`;
   }
+}
+
+export function getDisplayName(user: User | null | undefined): string {
+  if (!user) return "Guest";
+
+  const byProfile = user.profileName?.trim();
+  if (byProfile) return byProfile;
+
+  const names = [user.firstName, user.lastName]
+    .map((part) => part?.trim())
+    .filter((part): part is string => Boolean(part && part.length));
+
+  if (names.length > 0) return names.join(" ");
+
+  return user.username || "Guest";
 }

@@ -1,8 +1,13 @@
-import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
-import { loadDefaultUser, selectAuthInitialized, selectAuthLoading, selectAuthUser } from "@/features/auth/slice";
-import { useSignalR } from "@/features/notification/hooks/useSignalR";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
+import {
+  loadDefaultUser,
+  selectAuthInitialized,
+  selectAuthLoading,
+  selectAuthUser,
+} from "@/features/auth/slice";
+import { useSignalR } from "@/features/notification/hooks/useSignalR";
 
 export default function RootLayout() {
   const dispatch = useAppDispatch();

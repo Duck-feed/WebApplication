@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { postReducer } from "@/features/post";
 import { authReducer } from "@/features/auth";
 import { notificationReducer } from "@/features/notification";
+import { postReducer } from "@/features/post";
 
 export const store = configureStore({
   reducer: {
