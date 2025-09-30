@@ -1,13 +1,13 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/hooks/redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { selectAuthUser } from "@/features/auth/slice";
-import { markAsSeenMany, type UserNotification } from "@/features/notification";
+import { type UserNotification, markAsSeenMany } from "@/features/notification";
 import { useNotification } from "@/features/notification/hooks/useNotification";
 import { getListNotificationThunk, setUnseenCount } from "@/features/notification/slice";
 import { timeAgo } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const NotificationPage = () => {
   const navigate = useNavigate();

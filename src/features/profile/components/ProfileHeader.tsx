@@ -10,9 +10,7 @@ export default function ProfileHeader({ username, currentUsername }: ProfileHead
 
   return (
     <BaseHeader>
-      <h1 className="text-lg font-bold">
-        {isOwner ? "Profile" : username}
-      </h1>
+      <h1 className="text-lg font-bold">{isOwner ? "Profile" : username}</h1>
     </BaseHeader>
   );
 }

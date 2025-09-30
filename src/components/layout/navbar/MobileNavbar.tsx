@@ -1,10 +1,10 @@
-import SettingIcon from "@/components/icons/SettingIcon";
-import NotificationButton from "@/features/notification/components/NoticationButton";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import SettingIcon from "@/components/icons/SettingIcon";
+import NotificationButton from "@/features/notification/components/NoticationButton";
 import NavItem from "./NavItem";
-import { navItems } from "./navItems";
 import SettingsMenu from "./SettingsMenu";
+import { navItems } from "./navItems";
 
 export function MobileTopbar() {
   return (

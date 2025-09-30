@@ -1,3 +1,7 @@
+import clsx from "clsx";
+import LogoutIcon from "@/components/icons/LogoutIcon";
+import SettingIcon from "@/components/icons/SettingIcon";
+import SettingWheelIcon from "@/components/icons/SettingWheelIcon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,10 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import clsx from "clsx";
-import SettingWheelIcon from "@/components/icons/SettingWheelIcon";
-import SettingIcon from "@/components/icons/SettingIcon";
-import  LogoutIcon from "@/components/icons/LogoutIcon";
 
 interface SettingsMenuProps {
   trigger?: React.ReactNode;
@@ -31,16 +31,15 @@ export default function SettingsMenu({
 }: SettingsMenuProps) {
   const { logout } = useAuth();
 
-  const triggerNode =
-    trigger ?? (
-      <button
-        type="button"
-        aria-label="Open settings menu"
-        className="cursor-pointer p-2 rounded-md hover:bg-gray-100 outline-none focus:outline-none"
-      >
-        <SettingIcon/>
-      </button>
-    );
+  const triggerNode = trigger ?? (
+    <button
+      type="button"
+      aria-label="Open settings menu"
+      className="cursor-pointer p-2 rounded-md hover:bg-gray-100 outline-none focus:outline-none"
+    >
+      <SettingIcon />
+    </button>
+  );
 
   return (
     <DropdownMenu>
@@ -56,14 +55,14 @@ export default function SettingsMenu({
           onClick={onOpenSettings}
           className="flex items-center gap-3 py-3 cursor-pointer"
         >
-          <SettingWheelIcon/>
+          <SettingWheelIcon />
           <span className="font-semibold">Settings</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => logout?.()}
           className="flex items-center gap-3 py-3 text-red-600 focus:text-red-700 cursor-pointer hover:bg-red-50"
         >
-          <LogoutIcon/>
+          <LogoutIcon />
           <span className="font-semibold">Logout</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

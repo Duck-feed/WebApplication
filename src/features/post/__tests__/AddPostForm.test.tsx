@@ -14,7 +14,6 @@ jest.mock("@/components/emoji/EmojiPicker", () => ({
   ),
 }));
 
-
 jest.mock("@/features/auth/hooks/useAuth", () => ({
   __esModule: true,
   useAuth: () => ({

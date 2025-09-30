@@ -1,20 +1,15 @@
-import { useAuth } from "@/features/auth/hooks/useAuth";
-import { useAppSelector } from "@/app/hooks/redux";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { useAppSelector } from "@/app/hooks/redux";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { selectAuthError } from "@/features/auth/slice";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginSchema } from "../schema";
+import { type LoginSchema, loginSchema } from "../schema";
 
 export default function LoginForm() {
   const { login, loading } = useAuth();
@@ -35,8 +30,7 @@ export default function LoginForm() {
     try {
       await login(data.email, data.password, data.remember).unwrap();
       navigate("/");
-    } catch {
-    }
+    } catch {}
   };
 
   return (
@@ -67,9 +61,7 @@ export default function LoginForm() {
                 {...register("email")}
                 className="h-12 text-base"
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
             </div>
 
             {/* Password */}
@@ -84,9 +76,7 @@ export default function LoginForm() {
                 {...register("password")}
                 className="h-12 text-base"
               />
-              {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
             </div>
 
             {/* Remember + Forgot */}
@@ -103,12 +93,11 @@ export default function LoginForm() {
                     />
                   )}
                 />
-                <Label htmlFor="remember" className="text-sm">Remember me</Label>
+                <Label htmlFor="remember" className="text-sm">
+                  Remember me
+                </Label>
               </div>
-              <a
-                href="/forgot-password"
-                className="text-sm font-medium text-black hover:underline"
-              >
+              <a href="/forgot-password" className="text-sm font-medium text-black hover:underline">
                 Forgot Password?
               </a>
             </div>
@@ -124,19 +113,13 @@ export default function LoginForm() {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-4 p-6 sm:p-4">
-            <Button
-              type="submit"
-              className="w-full h-12 text-base font-bold"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full h-12 text-base font-bold" disabled={loading}>
               {loading ? "Signing in..." : "Sign in"}
             </Button>
 
             <div className="flex items-center w-full my-2">
               <div className="h-px flex-grow bg-gray-300"></div>
-              <span className="mx-2 text-sm font-medium text-gray-600">
-                Don’t have an account?
-              </span>
+              <span className="mx-2 text-sm font-medium text-gray-600">Don’t have an account?</span>
               <div className="h-px flex-grow bg-gray-300"></div>
             </div>
 

@@ -32,5 +32,4 @@ const getViteEnvUrl = (): string | undefined => {
 /**
  * API_BASE_URL: Ưu tiên lấy từ process.env → import.meta.env → fallback = ""
  */
-export const API_BASE_URL: string =
-  getProcessEnvUrl() ?? getViteEnvUrl() ?? "";
+export const API_BASE_URL: string = getProcessEnvUrl() ?? getViteEnvUrl() ?? "";

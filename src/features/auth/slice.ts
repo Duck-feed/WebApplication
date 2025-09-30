@@ -1,8 +1,8 @@
-﻿import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+﻿import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "@/app/store";
-import type { User } from "./types";
-import { authApi } from "./api";
 import { normalizeError } from "@/lib/utils";
+import { authApi } from "./api";
+import type { User } from "./types";
 
 export interface AuthState {
   user: User | null;
@@ -63,14 +63,16 @@ export const loginUser = createAsyncThunk(
     } catch (err: unknown) {
       return rejectWithValue(normalizeError(err));
     }
-  }
+  },
 );
 
 export const loadDefaultUser = createAsyncThunk(
   "auth/loadDefaultUser",
   async (_, { rejectWithValue }) => {
-    const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken") || sessionStorage.getItem("refreshToken");
+    const accessToken =
+      localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+    const refreshToken =
+      localStorage.getItem("refreshToken") || sessionStorage.getItem("refreshToken");
 
     if (!accessToken) return rejectWithValue("No token");
 
@@ -80,7 +82,7 @@ export const loadDefaultUser = createAsyncThunk(
     } catch (err: unknown) {
       return rejectWithValue(normalizeError(err));
     }
-  }
+  },
 );
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, { rejectWithValue }) => {

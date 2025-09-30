@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import React from "react";
+import clsx from "clsx";
 
 interface NavItemProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
@@ -17,7 +17,7 @@ export default function NavItem({ id, Icon, active, className, ...props }: NavIt
         "group flex items-center justify-center rounded-lg cursor-pointer",
         id === "plus" && "bg-[rgba(0,0,0,0.07)]",
         !isActive && "hover:bg-[rgba(0,0,0,0.035)]",
-        className
+        className,
       )}
     >
       <Icon active={isActive} />
