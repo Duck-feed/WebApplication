@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       "process.env": env,
+      __VITE_API_URL__: JSON.stringify(env.VITE_API_URL ?? ""),
     },
   };
 });

@@ -58,7 +58,9 @@ export function timeAgo(dateString: string): string {
   const gmt7Date = new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
 
   const now = new Date();
-  const diff = (now.getTime() - gmt7Date.getTime()) / 1000;
+  let diff = (now.getTime() - gmt7Date.getTime()) / 1000;
+
+  diff = Math.max(diff, 0);
 
   if (diff < 60) {
     return `${Math.floor(diff)} seconds ago`;

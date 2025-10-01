@@ -18,12 +18,6 @@ export const PostVisibility = {
   PUBLIC_FRIEND: 2,
 };
 
-export const DEFAULT_NEWSFEED_QUERY: ResolvedNewsfeedQuery = {
-  page: 1,
-  pageSize: 10,
-  sortField: "PublishedAt",
-};
-
 export const DEFAULT_QUERY: ResolvedNewsfeedQuery = {
   page: 1,
   pageSize: 10,

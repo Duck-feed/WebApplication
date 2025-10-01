@@ -1,4 +1,5 @@
 import * as signalR from "@microsoft/signalr";
+import { API_BASE_URL } from "@/lib/env";
 
 let connection: signalR.HubConnection | null = null;
 
@@ -8,8 +9,9 @@ export async function initSignalRConnection(userId: string) {
   }
 
   connection = new signalR.HubConnectionBuilder()
-    .withUrl(`${import.meta.env.VITE_API_URL}/hub/notifyHub?userId=${userId}`, {
-      transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling,
+    .withUrl(`${API_BASE_URL}/hub/notifyHub?userId=${userId}`, {
+      transport:
+        signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling,
       // accessTokenFactory: () => token || "",
       // withCredentials: true,
     })
