@@ -1,35 +1,31 @@
-// env.ts
-
 const sanitizeUrl = (value: string | undefined): string | undefined => {
   if (!value) return undefined;
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : undefined;
 };
 
-/**
- * Lấy biến từ process.env (chỉ hữu dụng khi chạy local dev/server)
- */
+type ProcessEnvLike = Record<string, string | undefined>;
+
 const getProcessEnvUrl = (): string | undefined => {
-  if (typeof process !== "undefined" && process.env) {
-    return sanitizeUrl(process.env.VITE_API_URL);
+  let envSource: ProcessEnvLike | undefined;
+
+  if (typeof process !== "undefined" && typeof process.env === "object") {
+    envSource = process.env as ProcessEnvLike;
+  } else if (typeof globalThis !== "undefined") {
+    const globalProcess = (globalThis as typeof globalThis & {
+      process?: { env?: ProcessEnvLike };
+    }).process;
+
+    envSource = globalProcess?.env;
   }
-  return undefined;
+
+  return sanitizeUrl(envSource?.VITE_API_URL);
 };
 
-/**
- * Lấy biến từ import.meta.env (chuẩn của Vite khi build trên Vercel)
- */
-const getViteEnvUrl = (): string | undefined => {
-  try {
-    // import.meta.env chỉ có khi chạy trong môi trường Vite
-    const env = import.meta.env as Record<string, string>;
-    return sanitizeUrl(env?.VITE_API_URL);
-  } catch {
-    return undefined;
-  }
+declare const __VITE_API_URL__: string | undefined;
+
+const getViteDefineUrl = (): string | undefined => {
+  return typeof __VITE_API_URL__ === "string" ? sanitizeUrl(__VITE_API_URL__) : undefined;
 };
 
-/**
- * API_BASE_URL: Ưu tiên lấy từ process.env → import.meta.env → fallback = ""
- */
-export const API_BASE_URL: string = getProcessEnvUrl() ?? getViteEnvUrl() ?? "";
+export const API_BASE_URL: string = getProcessEnvUrl() ?? getViteDefineUrl() ?? "";
