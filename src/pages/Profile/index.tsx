@@ -2,13 +2,7 @@
 import { useInView } from "react-intersection-observer";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import {
-  AddPostCard,
-  type Post,
-  PostCard,
-  PostCardSkeleton,
-  useInfinitePosts,
-} from "@/features/post";
+import { AddPostCard, type Post, PostCard, PostCardSkeleton, useInfinitePosts } from "@/features/post";
 import { ProfileCard, ProfileHeader } from "@/features/profile";
 import { getDisplayName } from "@/lib/utils";
 
@@ -107,3 +101,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

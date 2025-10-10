@@ -1,16 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getPersonalNewsfeed } from "./api";
-import type { NewsfeedPagination, NewsfeedQuery, NewsfeedResponse, Post } from "./types";
+import type { NewsfeedQuery, NewsfeedResponse, Post } from "./types";
 
 interface PostState {
   items: Post[];
-  pagination: NewsfeedPagination | null;
+  hasMore: boolean;
+  next: string | null;
   loading: boolean;
 }
 
 const initialState: PostState = {
   items: [],
-  pagination: null,
+  hasMore: false,
+  next: null,
   loading: false,
 };
 
@@ -18,7 +20,7 @@ export const fetchPosts = createAsyncThunk<
   NewsfeedResponse,
   { userId: string; params?: NewsfeedQuery }
 >("post/fetchPosts", async ({ userId, params }) => {
-  return await getPersonalNewsfeed(userId, params);
+  return await getPersonalNewsfeed(userId, { cursor: "", pageSize: params?.pageSize });
 });
 
 const postSlice = createSlice({
@@ -33,7 +35,8 @@ const postSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload.posts;
-        state.pagination = action.payload.pagination;
+        state.hasMore = action.payload.hasMore;
+        state.next = action.payload.cursor;
       })
       .addCase(fetchPosts.rejected, (state) => {
         state.loading = false;
