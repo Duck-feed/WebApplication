@@ -24,30 +24,6 @@ export interface Post {
   isReactedByCurrentUser: boolean;
 }
 
-export interface NewsfeedPagination {
-  page: number;
-  pageSize: number;
-  totalPages: number;
-  totalItems: number;
-}
-
-export interface NewsfeedResponse {
-  posts: Post[];
-  pagination: NewsfeedPagination;
-}
-
-export interface NewsfeedQuery {
-  page?: number;
-  pageSize?: number;
-  sortField?: string;
-}
-
-export interface ResolvedNewsfeedQuery {
-  page: number;
-  pageSize: number;
-  sortField: string;
-}
-
 export interface NewsfeedApiMedia {
   id?: string;
   url?: string;
@@ -74,23 +50,27 @@ export interface NewsfeedApiPost {
 }
 
 export interface NewsfeedApiResponse {
-  currentPage?: number;
-  pageSize?: number;
-  total?: number;
-  lastPage?: number;
   data?: NewsfeedApiPost[];
+  hasMore?: boolean;
+  cursor?: string | null;
 }
 
-export type UseInfinitePostsResult = {
+export interface NewsfeedResponse {
   posts: Post[];
-  pagination: NewsfeedPagination | null;
-  loadingInitial: boolean;
-  loadingMore: boolean;
-  error: Error | null;
   hasMore: boolean;
-  fetchNextPage: () => void;
-  refresh: () => void;
-};
+  cursor: string | null;
+}
+
+// Query types for feed requests (cursor-based API)
+export interface NewsfeedQuery {
+  pageSize?: number;
+  sortField?: string;
+}
+
+export interface ResolvedNewsfeedQuery {
+  pageSize: number;
+  sortField: string;
+}
 
 export type AddPostCardProps = Readonly<{
   onPostCreated?: () => void;
@@ -103,16 +83,12 @@ export type AddPostModalProps = Readonly<{
   onPostCreated?: () => void;
 }>;
 
-export interface UsePostsResult {
-  posts: Post[] | null;
-  pagination: NewsfeedPagination | null;
-  loading: boolean;
+export type UseInfinitePostsResult = {
+  posts: Post[];
+  loadingInitial: boolean;
+  loadingMore: boolean;
   error: Error | null;
-  page: number;
-  pageSize: number;
-  sortField: string;
-  setPage: (page: number) => void;
-  setPageSize: (pageSize: number) => void;
-  setSortField: (sortField: string) => void;
+  hasMore: boolean;
+  fetchNextPage: () => void;
   refresh: () => void;
-}
+};

@@ -145,7 +145,6 @@ describe("post mapper", () => {
       const resolved = resolveNewsfeedQuery({ pageSize: 25 });
 
       expect(resolved).toEqual<ResolvedNewsfeedQuery>({
-        page: 1,
         pageSize: 25,
         sortField: "PublishedAt",
       });
@@ -153,18 +152,15 @@ describe("post mapper", () => {
   });
 
   describe("mapNewsfeedResponse", () => {
-    it("normalizes posts and computes pagination fallbacks", () => {
+    it("normalizes posts and exposes continuation fields", () => {
       const query: ResolvedNewsfeedQuery = {
-        page: 2,
         pageSize: 5,
         sortField: "PublishedAt",
       };
       const response = mapNewsfeedResponse(
         {
-          currentPage: 3,
-          total: undefined,
-          lastPage: undefined,
-          pageSize: 2,
+          hasMore: true,
+          cursor: "abc123",
           data: [
             { id: "post-6", content: "hello" },
             { id: "post-7" },
@@ -177,12 +173,8 @@ describe("post mapper", () => {
       expect(response.posts[0]).toMatchObject({ id: "post-6", content: "hello" });
       expect(response.posts[1]).toMatchObject({ id: "post-7", content: "" });
 
-      expect(response.pagination).toEqual({
-        page: 3,
-        pageSize: 2,
-        totalItems: 2,
-        totalPages: 1,
-      });
+      expect(response.hasMore).toBe(true);
+      expect(response.cursor).toBe("abc123");
     });
   });
 });

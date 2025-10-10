@@ -1,11 +1,11 @@
 import { DEFAULT_QUERY } from "./constant";
 import type {
-    NewsfeedApiPost,
-    NewsfeedApiResponse,
-    NewsfeedQuery,
-    NewsfeedResponse,
-    Post,
-    ResolvedNewsfeedQuery,
+  NewsfeedApiPost,
+  NewsfeedApiResponse,
+  NewsfeedQuery,
+  NewsfeedResponse,
+  Post,
+  ResolvedNewsfeedQuery,
 } from "./types";
 
 export const normalizePost = (apiPost: NewsfeedApiPost): Post => {
@@ -93,29 +93,19 @@ export const resolvePostPayload = (payload: unknown): Post => {
 };
 
 export const resolveNewsfeedQuery = (params: NewsfeedQuery): ResolvedNewsfeedQuery => ({
-    page: params.page ?? DEFAULT_QUERY.page,
-    pageSize: params.pageSize ?? DEFAULT_QUERY.pageSize,
-    sortField: params.sortField ?? DEFAULT_QUERY.sortField,
+  pageSize: params.pageSize ?? DEFAULT_QUERY.pageSize,
+  sortField: params.sortField ?? DEFAULT_QUERY.sortField,
 });
 
 export const mapNewsfeedResponse = (
-    payload: NewsfeedApiResponse,
-    query: ResolvedNewsfeedQuery,
+  payload: NewsfeedApiResponse,
+  _query: ResolvedNewsfeedQuery,
 ): NewsfeedResponse => {
-    const posts = Array.isArray(payload.data) ? payload.data.map(normalizePost) : [];
+  const posts = Array.isArray(payload.data) ? payload.data.map(normalizePost) : [];
 
-    const resolvedPageSize = payload.pageSize ?? query.pageSize;
-    const totalItems = payload.total ?? posts.length;
-    const totalPages =
-        payload.lastPage ?? (resolvedPageSize > 0 ? Math.ceil(totalItems / resolvedPageSize) : 0);
-
-    return {
-        posts,
-        pagination: {
-            page: payload.currentPage ?? query.page,
-            pageSize: resolvedPageSize,
-            totalItems,
-            totalPages,
-        },
-    };
+  return {
+    posts,
+    hasMore: Boolean(payload.hasMore),
+    cursor: payload.cursor ?? null,
+  };
 };
