@@ -1,23 +1,21 @@
-﻿import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getPersonalNewsfeed } from "@/features/post/api";
-import type { NewsfeedPagination, NewsfeedQuery, Post } from "@/features/post/types";
+import type { Post } from "@/features/post/types";
 import { DEFAULT_QUERY } from "../constant";
 import type { UseInfinitePostsResult } from "../types";
 
 export function useInfinitePosts(
   userId: string | undefined,
-  initialQuery: NewsfeedQuery = {},
+  initialPageSize?: number,
 ): UseInfinitePostsResult {
-  const resolvedQuery = useMemo(
-    () => ({
-      pageSize: initialQuery.pageSize ?? DEFAULT_QUERY.pageSize,
-      sortField: initialQuery.sortField ?? DEFAULT_QUERY.sortField,
-    }),
-    [initialQuery.pageSize, initialQuery.sortField],
+  const pageSize = useMemo(
+    () => initialPageSize ?? DEFAULT_QUERY.pageSize,
+    [initialPageSize],
   );
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [pagination, setPagination] = useState<NewsfeedPagination | null>(null);
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const [loadingInitial, setLoadingInitial] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -26,7 +24,8 @@ export function useInfinitePosts(
   useEffect(() => {
     if (!userId) {
       setPosts([]);
-      setPagination(null);
+      setCursor(null);
+      setHasMore(false);
       setLoadingInitial(false);
       setLoadingMore(false);
       setError(null);
@@ -39,18 +38,19 @@ export function useInfinitePosts(
       setLoadingInitial(true);
       setError(null);
       setPosts([]);
-      setPagination(null);
+      setCursor(null);
+      setHasMore(false);
 
       try {
         const response = await getPersonalNewsfeed(userId, {
-          page: 1,
-          pageSize: resolvedQuery.pageSize,
-          sortField: resolvedQuery.sortField,
+          cursor: "",
+          pageSize,
         });
 
         if (cancelled) return;
         setPosts(response.posts);
-        setPagination(response.pagination);
+        setCursor(response.cursor);
+        setHasMore(response.hasMore);
       } catch (err) {
         if (cancelled) return;
         const normalizedError =
@@ -68,25 +68,24 @@ export function useInfinitePosts(
     return () => {
       cancelled = true;
     };
-  }, [userId, resolvedQuery.pageSize, resolvedQuery.sortField, refreshKey]);
+  }, [userId, pageSize, refreshKey]);
 
   const fetchNextPage = useCallback(async () => {
     if (!userId || loadingInitial || loadingMore) return;
-    if (!pagination) return;
-    if (pagination.totalPages <= pagination.page) return;
+    if (!hasMore) return;
 
     setLoadingMore(true);
     setError(null);
 
     try {
       const response = await getPersonalNewsfeed(userId, {
-        page: pagination.page + 1,
-        pageSize: resolvedQuery.pageSize,
-        sortField: resolvedQuery.sortField,
+        cursor: cursor ?? "",
+        pageSize,
       });
 
       setPosts((prev) => [...prev, ...response.posts]);
-      setPagination(response.pagination);
+      setCursor(response.cursor);
+      setHasMore(response.hasMore);
     } catch (err) {
       const normalizedError =
         err instanceof Error ? err : new Error(String(err ?? "Failed to load posts"));
@@ -94,24 +93,14 @@ export function useInfinitePosts(
     } finally {
       setLoadingMore(false);
     }
-  }, [
-    userId,
-    loadingInitial,
-    loadingMore,
-    pagination,
-    resolvedQuery.pageSize,
-    resolvedQuery.sortField,
-  ]);
+  }, [userId, loadingInitial, loadingMore, hasMore, cursor, pageSize]);
 
   const refresh = useCallback(() => {
     setRefreshKey((value) => value + 1);
   }, []);
 
-  const hasMore = Boolean(pagination && pagination.page < pagination.totalPages);
-
   return {
     posts,
-    pagination,
     loadingInitial,
     loadingMore,
     error,
@@ -120,3 +109,5 @@ export function useInfinitePosts(
     refresh,
   };
 }
+
+export default useInfinitePosts;

@@ -1,12 +1,12 @@
 import FeedHeader from "@/components/FeedHeader";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { AddPostCard, PostCard, PostCardSkeleton, usePosts } from "@/features/post";
+import { AddPostCard, PostCard, PostCardSkeleton, useInfinitePosts } from "@/features/post";
 
 export default function NewFeed() {
   const { user, loading: authLoading } = useAuth();
-  const { posts, loading, error } = usePosts(user?.id);
+  const { posts, loadingInitial, error } = useInfinitePosts(user?.id);
 
-  const shouldShowSkeleton = authLoading || loading || posts === null;
+  const shouldShowSkeleton = authLoading || loadingInitial;
 
   return (
     <div className="flex flex-col items-center gap-3">
